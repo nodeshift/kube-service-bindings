@@ -22,7 +22,7 @@
     "bindings"
   ],
   "engines": {
-    "node": " ^10"
+    "node": ">=10"
   },
   "dependencies": {},
   "support": true
