@@ -1,0 +1,29 @@
+{
+  "name": "kube-service-bindings",
+  "version": "0.0.1",
+  "author": "Red Hat, Inc.",
+  "license": "Apache-2.0",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodeshift/kube-service-bindings.git"
+  },
+  "files": [
+    "index.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/nodeshift/kube-service-bindings/issues"
+  },
+  "homepage": "https://github.com/nodeshift/kube-service-bindings",
+  "description": "A fail-fast circuit breaker for promises and callbacks",
+  "keywords": [
+    "kubernetes",
+    "service bindings",
+    "bindings"
+  ],
+  "engines": {
+    "node": " ^10"
+  },
+  "dependencies": {},
+  "support": true
+}
