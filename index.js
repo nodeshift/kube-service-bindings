@@ -40,8 +40,8 @@ services['KAFKA'] =
   };
 
 // depending on the type of the key this will
-// either set the value directory on the binding object
-// passed in or create a subobject on the binding and
+// either set the value directly on the binding object
+// passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
 function setKey(binding, key, value) {
   if (key) {
