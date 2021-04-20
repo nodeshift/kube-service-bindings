@@ -3,23 +3,66 @@ const fs = require('fs');
 const path = require('path');
 
 const  services = new Object();
+
+// services and clients that kube-service-bindings understands
 services['KAFKA'] =
   { 'type': 'kafka',
     'clients': { 
-      'node-rdkafka': { 'securityProtocol': 'security.protocol',
-                        'bootstrapServers': 'bootstrap.servers',
-                        'clientId': 'client.id',
-                        'saslMechanism': 'sasl.mechanisms',
-                        'type': '',
-                        'provider': '',
-                        'user': 'sasl.username',
-                        'password': 'sasl.password'
-                      }
+      'node-rdkafka': { 'mapping': { 'securityProtocol': 'security.protocol',
+                                     'bootstrapServers': 'bootstrap.servers',
+                                     'clientId': 'client.id',
+                                     'saslMechanism': 'sasl.mechanisms',
+                                     'type': '',
+                                     'provider': '',
+                                     'clientSecret': '',
+                                     'user': 'sasl.username',
+                                     'password': 'sasl.password'
+                                   },
+	              },
+      'kafkajs'     : { 'mapping': { 'securityProtocol': 'ssl',
+                                     'bootstrapServers': ['brokers'],
+                                     'clientId': 'clientId',
+                                     'saslMechanism': {'sasl': 'mechanism'},
+                                     'type': '',
+                                     'provider': '',
+                                     'clientSecret': '',
+                                     'user': { 'sasl': 'username' },
+                                     'password': { 'sasl': 'password' }
+                                   },
+	                'valueMapping': { 'ssl': { 'SASL_SSL': true } },
+	                'transform': (binding) => {
+			  if (binding.sasl && binding.sasl.mechanism) {
+		            binding.sasl.mechanism = binding.sasl.mechanism.toLowerCase();
+	                  }
+			}
+	              }
     }
   };
 
+// depending on the type of the key this will
+// either set the value directory on the binding object
+// passed in or create a subobject on the binding and
+// then call setKey recursively to set the value
+function setKey(binding, key, value) {
+  if (key) {
+    if (typeof key === "string") {
+      binding[key] =  value;
+    } else if (typeof key === "object") {
+      if (Array.isArray(key)) {
+        binding[key[0]] = new Array(value);
+      } else {
+        for (let subkey in key) {
+          if (!binding[subkey]) {
+            binding[subkey] = new Object();
+          }
+          setKey(binding[subkey], key[subkey], value);
+        }
+      }
+    }
+  }
+}
 
-
+// return the bidings requested
 function getBinding(type, client, id) {
   // validate we know about the type
   if (!services[type]) {
@@ -63,13 +106,31 @@ function getBinding(type, client, id) {
   bindingFiles.forEach((file) => {
     if (!file.startsWith('..')) {
       let key = file;
-      if (client && (services[type].clients[client][key] ||
-	             services[type].clients[client][key] === '')) {
-        key = services[type].clients[client][key];
-      }
-      if (key) {
-        binding[key] =
+      let value =
           fs.readFileSync(path.join(bindingsRoot, file)).toString();
+
+      if (client) {
+	const clientInfo = services[type].clients[client];
+        if (client && (clientInfo.mapping[key] ||
+                       clientInfo.mapping[key] === '')) {
+          key = clientInfo.mapping[key];
+        }
+
+        // get the value and map if needed
+        if ((clientInfo.valueMapping) &&
+            (clientInfo.valueMapping[key])) {
+          value = clientInfo.valueMapping[key][value];
+	}
+
+        // set the key
+        setKey(binding, key, value);
+
+        // do any final transforms needed
+        if(clientInfo.transform) {
+          clientInfo.transform(binding);
+        }
+      } else {
+        setKey(binding, key, value);
       }
     }
   });
