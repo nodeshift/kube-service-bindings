@@ -11,7 +11,7 @@ to be familiar with service bindings.
 The package provides the `getBinding` method which does roughly
 the following:
 
-* Looks for the $SERVICE_BINDING_ENVIRONMENT variable in order
+* Looks for the $SERVICE_BINDING_ROOT variable in order
   to determine if bindings are available.
 * Reads the info from the files. 
 * Maps the names of the files to the options names needed by the
