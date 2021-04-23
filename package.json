@@ -1,6 +1,6 @@
 {
   "name": "kube-service-bindings",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "",
   "license": "Apache-2.0",
   "scripts": {
@@ -18,7 +18,7 @@
     "url": "https://github.com/nodeshift/kube-service-bindings/issues"
   },
   "homepage": "https://github.com/nodeshift/kube-service-bindings",
-  "description": "A fail-fast circuit breaker for promises and callbacks",
+  "description": "helper for consuming kubernetes service bindings",
   "keywords": [
     "kubernetes",
     "service bindings",
