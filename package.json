@@ -23,7 +23,8 @@
   "keywords": [
     "kubernetes",
     "service bindings",
-    "bindings"
+    "bindings",
+    "kafka"
   ],
   "engines": {
     "node": ">=10"

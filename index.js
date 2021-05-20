@@ -2,47 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const services = {};
-
-// services and clients that kube-service-bindings understands
-services.KAFKA =
-  {
-    type: 'kafka',
-    clients: {
-      'node-rdkafka': {
-        mapping: {
-          securityProtocol: 'security.protocol',
-          bootstrapServers: 'bootstrap.servers',
-          clientId: 'client.id',
-          saslMechanism: 'sasl.mechanisms',
-          type: '',
-          provider: '',
-          clientSecret: '',
-          user: 'sasl.username',
-          password: 'sasl.password'
-        }
-      },
-      kafkajs: {
-        mapping: {
-          securityProtocol: 'ssl',
-          bootstrapServers: ['brokers'],
-          clientId: 'clientId',
-          saslMechanism: { sasl: 'mechanism' },
-          type: '',
-          provider: '',
-          clientSecret: '',
-          user: { sasl: 'username' },
-          password: { sasl: 'password' }
-        },
-        valueMapping: { ssl: { SASL_SSL: true } },
-        transform: (binding) => {
-          if (binding.sasl && binding.sasl.mechanism) {
-            binding.sasl.mechanism = binding.sasl.mechanism.toLowerCase();
-          }
-        }
-      }
-    }
-  };
+const typeMapping = { KAFKA: 'kafka' };
 
 // depending on the type of the key this will
 // either set the value directly on the binding object
@@ -70,14 +30,18 @@ function setKey (binding, key, value) {
 // return the bidings requested
 function getBinding (type, client, id) {
   // validate we know about the type
-  if (!services[type]) {
+  if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
     throw new Error('Unknown service type');
   }
 
   // validate that we know about the requested client
-  if (client && (!services[type].clients ||
-                 !services[type].clients[client])) {
-    throw new Error('Unknown client');
+  let clientInfo;
+  if (client) {
+    try {
+      clientInfo = require(path.join(__dirname, 'clients', type, client));
+    } catch (e) {
+      throw new Error('Unknown client');
+    }
   }
 
   // find the matching binding
@@ -89,7 +53,7 @@ function getBinding (type, client, id) {
       try {
         const bindingType =
           fs.readFileSync(path.join(root, file, 'type')).toString().trim();
-        if (bindingType === services[type].type) {
+        if (bindingType === typeMapping[type]) {
           if ((id === undefined) || file.includes(id)) {
             bindingsRoot = path.join(root, file);
             break;
@@ -114,7 +78,6 @@ function getBinding (type, client, id) {
           fs.readFileSync(path.join(bindingsRoot, file)).toString();
 
       if (client) {
-        const clientInfo = services[type].clients[client];
         if (client && (clientInfo.mapping[key] ||
                        clientInfo.mapping[key] === '')) {
           key = clientInfo.mapping[key];
