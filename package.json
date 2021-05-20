@@ -5,7 +5,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "mocha --recursive"
+    "test": "nyc mocha --recursive",
+    "coverage": "nyc npm test && nyc report --reporter=html"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,6 @@
   "engines": {
     "node": ">=10"
   },
-  "dependencies": {},
   "support": true,
   "devDependencies": {
     "eslint": "^7.24.0",
@@ -37,6 +37,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0"
   }
 }
