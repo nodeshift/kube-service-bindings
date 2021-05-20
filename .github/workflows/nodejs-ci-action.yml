@@ -25,7 +25,7 @@ jobs:
     - run: npm test
     - run: npx @pkgjs/support validate
     - run: node_modules/nyc/bin/nyc.js report --reporter=lcovonly
-   - name: Coveralls Parallel
+    - name: Coveralls Parallel
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.github_token }}
