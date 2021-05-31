@@ -28,7 +28,7 @@ describe('basic tests', () => {
     }
   });
 
-  it('no type', () => {
+  it('no client', () => {
     const binding = bindings.getBinding('KAFKA');
     assert(binding);
     assert.deepEqual(binding, {
