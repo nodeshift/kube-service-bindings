@@ -15,7 +15,8 @@
   },
   "files": [
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "clients/"
   ],
   "bugs": {
     "url": "https://github.com/nodeshift/kube-service-bindings/issues"
