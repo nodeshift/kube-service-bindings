@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "author": "",
   "license": "Apache-2.0",
+  "typings": "index.d.ts",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "nyc mocha --recursive",
