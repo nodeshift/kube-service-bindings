@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "author": "",
   "license": "Apache-2.0",
+  "typings": "index.d.ts",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "nyc mocha --recursive",
@@ -13,7 +14,9 @@
     "url": "git://github.com/nodeshift/kube-service-bindings.git"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts",
+    "clients/"
   ],
   "bugs": {
     "url": "https://github.com/nodeshift/kube-service-bindings/issues"
@@ -38,7 +41,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
+    "kafkajs": "^1.15.0",
     "mocha": "^8.3.2",
+    "node-rdkafka": "^2.10.1",
     "nyc": "^15.1.0"
-  }
+  },
+  "dependencies": {}
 }
