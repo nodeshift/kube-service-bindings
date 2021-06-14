@@ -7,7 +7,9 @@
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "nyc mocha --recursive",
-    "coverage": "nyc npm test && nyc report --reporter=html"
+    "coverage": "nyc npm test && nyc report --reporter=html",
+    "prerelease": "npm run test",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -42,7 +44,8 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "mocha": "^8.3.2",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "standard-version": "^9.3.0"
   },
   "dependencies": {}
 }
