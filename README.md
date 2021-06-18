@@ -1,5 +1,7 @@
 # kube-service-bindings
 
+![CI](https://github.com/nodeshift/kube-service-bindings/workflows/Node.js%20CI/badge.svg)
+
 Service bindings is [kubernetes](https://kubernetes.io/) spec on
 how to communicate service secrets to applications in an automated way.
 The spec is available [here](https://github.com/k8s-service-bindings/spec).
