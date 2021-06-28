@@ -75,7 +75,7 @@ function getBinding (type, client, id) {
     if (!file.startsWith('..')) {
       let key = file;
       let value =
-          fs.readFileSync(path.join(bindingsRoot, file)).toString();
+          fs.readFileSync(path.join(bindingsRoot, file)).toString().trim();
 
       if (client) {
         if (client && (clientInfo.mapping[key] ||
