@@ -2,7 +2,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const typeMapping = { KAFKA: 'kafka' };
+const typeMapping = {
+  KAFKA: 'kafka',
+  POSTGRESQL: 'postgresql'
+};
 
 // depending on the type of the key this will
 // either set the value directly on the binding object
