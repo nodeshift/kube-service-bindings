@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.4 (2021-12-07)
+
+
+### Features
+
+* basic support for postgressql and pg client ([84fa2b4](https://github.com/nodeshift/kube-service-bindings/commit/84fa2b496e277d00779d3b7ebaa26d4fd180e9e6))
+
+
+### Bug Fixes
+
 ### 0.0.3 (2021-06-14)
 
 
