@@ -33,6 +33,8 @@ The parameters for `getBinding` include:
   * KAFKA
     * node-rdkafka
     * kafkajs
+  * POSTGRESQL
+    * pg
 
   If you don't specify a client, the object returned will
   be a direct map from the bindings, with the keys
