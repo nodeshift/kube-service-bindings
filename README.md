@@ -22,7 +22,10 @@ the following:
 The parameters for `getBinding` include:
 
 * `type` - The type of service for which a binding is being
-  requested. Currently the only supported type is 'KAFKA'.
+  requested. Currently the supported types are:
+  * 'KAFKA'
+  * 'POSTGRESQL'
+  * 'REDIS'
 
 * `client` - the package the application is using to connect
   to the service. kube-service-bindings is aware of a
@@ -35,6 +38,9 @@ The parameters for `getBinding` include:
     * kafkajs
   * POSTGRESQL
     * pg
+  * REDIS
+    * redis
+    * ioredis
 
   If you don't specify a client, the object returned will
   be a direct map from the bindings, with the keys

@@ -4,7 +4,8 @@ const path = require('path');
 
 const typeMapping = {
   KAFKA: 'kafka',
-  POSTGRESQL: 'postgresql'
+  POSTGRESQL: 'postgresql',
+  REDIS: 'redis'
 };
 
 // depending on the type of the key this will
