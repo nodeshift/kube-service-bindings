@@ -26,6 +26,7 @@ The parameters for `getBinding` include:
   * 'KAFKA'
   * 'POSTGRESQL'
   * 'REDIS'
+  * 'MONGODB'
 
 * `client` - the package the application is using to connect
   to the service. kube-service-bindings is aware of a
@@ -41,6 +42,8 @@ The parameters for `getBinding` include:
   * REDIS
     * redis
     * ioredis
+  * MONGODB
+    * mongodb
 
   If you don't specify a client, the object returned will
   be a direct map from the bindings, with the keys
