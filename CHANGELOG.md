@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.6 (2022-02-16)
+
+
+### Features
+
+* add mongodb client ([c64f925](https://github.com/nodeshift/kube-service-bindings/commit/c64f925e0aa5ce213e1040b4433b628ed5c573d5))
+
+
+### Bug Fixes
+
+
 ### 0.0.5 (2022-01-20)
 
 
