@@ -14,9 +14,11 @@ describe('test-mongodb-bindings', () => {
     const binding = bindings.getBinding('MONGODB', 'mongodb');
     assert(binding);
     assert.deepEqual(binding, {
-      auth: {
-        password: 'p1',
-        user: 'michael'
+      connectionOptions: {
+        auth: {
+          password: 'p1',
+          user: 'michael'
+        }
       },
       host: 'test.ourdomain.com',
       port: '1234',

@@ -1,8 +1,8 @@
 // Binding for mongodb client
 module.exports = {
   mapping: {
-    user: { auth: 'user' },
-    password: { auth: 'password' },
+    user: { connectionOptions: { auth: 'user' } },
+    password: { connectionOptions: { auth: 'password' } },
     host: 'host',
     port: 'port',
     srv: 'srv',
@@ -10,11 +10,15 @@ module.exports = {
   },
   transform: (binding) => {
     let userPassword = '';
-    if (binding.auth && binding.auth.user) {
-      const encodedUser = encodeURIComponent(binding.auth.user);
+    if (binding.connectionOptions &&
+        binding.connectionOptions.auth &&
+        binding.connectionOptions.auth.user) {
+      const encodedUser =
+        encodeURIComponent(binding.connectionOptions.auth.user);
       let encodedPassword = '';
-      if (binding.auth.password) {
-        encodedPassword = encodeURIComponent(binding.auth.password);
+      if (binding.connectionOptions.auth.password) {
+        encodedPassword =
+          encodeURIComponent(binding.connectionOptions.auth.password);
       }
       userPassword = `${encodedUser}:${encodedPassword}@`;
     }
