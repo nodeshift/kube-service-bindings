@@ -17,7 +17,7 @@ describe('test-mongodb-bindings', () => {
       connectionOptions: {
         auth: {
           password: 'p1',
-          user: 'michael'
+          username: 'michael'
         }
       },
       host: 'test.ourdomain.com',
