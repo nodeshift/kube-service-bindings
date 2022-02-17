@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.7 (2022-02-17)
+
+
+### Features
+
+* improve mongo support ([#25](https://github.com/nodeshift/kube-service-bindings/issues/25)) ([2b183d4](https://github.com/nodeshift/kube-service-bindings/commit/2b183d4a069d8d9f8aa8bed093e683facf07b702))
+
+
+### Bug Fixes
+
+
 ### 0.0.6 (2022-02-16)
 
 
