@@ -20,8 +20,7 @@ describe('test-mongodb-bindings', () => {
       },
       host: 'test.ourdomain.com',
       port: '1234',
-      srv: 'true',
-      url: 'mongodb+srv://michael:p1@test.ourdomain.com'
+      url: 'mongodb://michael:p1@test.ourdomain.com:1234'
     });
   });
 
