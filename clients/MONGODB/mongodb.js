@@ -1,7 +1,7 @@
 // Binding for mongodb client
 module.exports = {
   mapping: {
-    user: { connectionOptions: { auth: 'username' } },
+    username: { connectionOptions: { auth: 'username' } },
     password: { connectionOptions: { auth: 'password' } },
     host: 'host',
     port: 'port',
