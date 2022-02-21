@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.8 (2022-02-21)
+
+
+### Features
+
+
+### Bug Fixes
+
+* mongodb client username binding fix ([#27](https://github.com/nodeshift/kube-service-bindings/issues/27)) ([d3ef369](https://github.com/nodeshift/kube-service-bindings/commit/d3ef3696102d6e7fc334391e00e8f3f12e572b1c))
+
 ### 0.0.7 (2022-02-17)
 
 
