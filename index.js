@@ -12,7 +12,7 @@ const typeMapping = {
 
 const aliases = {
   amqp: ['rabbitmq']
-}
+};
 
 // depending on the type of the key this will
 // either set the value directly on the binding object
