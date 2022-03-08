@@ -3,8 +3,9 @@ module.exports = {
   mapping: {
     host: 'host',
     password: 'password',
-    node: 'node',
     port: 'port',
+    provider: 'provider',
+    type: 'type',
     username: 'username'
   }
 };
