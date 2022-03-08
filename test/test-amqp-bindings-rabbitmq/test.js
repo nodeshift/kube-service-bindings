@@ -17,8 +17,8 @@ describe('On RabbitMQ message broker over AMQP 1.0 protocol', () => {
       host: 'test.domain.com',
       password: 'pass1',
       port: 1234,
-      provider: 'amqp',
-      type: 'amqp',
+      provider: 'rabbitmq',
+      type: 'rabbitmq',
       username: 'user1'
     });
   });
