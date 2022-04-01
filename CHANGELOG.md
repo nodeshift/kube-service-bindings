@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://www.github.com/nodeshift/kube-service-bindings/compare/v0.0.9...v0.0.10) (2022-04-01)
+
+
+### Bug Fixes
+
+* commiting package-lock.json file ([#30](https://www.github.com/nodeshift/kube-service-bindings/issues/30)) ([37b2d4f](https://www.github.com/nodeshift/kube-service-bindings/commit/37b2d4f0f6f0d4e6e2968fad2ca528e2277fb0fe))
+
 ### [0.0.9](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.8...v0.0.9) (2022-03-08)
 
 ### 0.0.8 (2022-02-21)
