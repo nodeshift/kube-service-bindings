@@ -104,5 +104,4 @@ dist
 .tern-port
 
 # lock files
-package-lock.json
 yarn.lock
