@@ -7,7 +7,8 @@ const typeMapping = {
   POSTGRESQL: 'postgresql',
   REDIS: 'redis',
   MONGODB: 'mongodb',
-  AMQP: 'amqp'
+  AMQP: 'amqp',
+  MYSQL: 'mysql'
 };
 
 const aliases = {
