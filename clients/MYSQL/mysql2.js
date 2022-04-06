@@ -1,7 +1,9 @@
 module.exports = {
   mapping: {
-    host: 'localhost',
-    user: 'root',
-    database: 'test'
+    host: 'host',
+    port: 'port',
+    username: 'user',
+    database: 'database',
+    password: 'password'
   }
 };
