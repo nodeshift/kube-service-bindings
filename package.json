@@ -39,6 +39,7 @@
   "support": true,
   "devDependencies": {
     "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-semistandard": "^16.0.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
