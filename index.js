@@ -19,21 +19,23 @@ const aliases = {
 // either set the value directly on the binding object
 // passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
-function setKey (binding, key, value) {
-  if (key) {
-    if (typeof key === 'string') {
-      binding[key] = value;
-    } else if (typeof key === 'object') {
-      if (Array.isArray(key)) {
-        binding[key[0]] = new Array(value);
-      } else {
-        for (const subkey in key) {
-          if (!binding[subkey]) {
-            binding[subkey] = {};
-          }
-          setKey(binding[subkey], key[subkey], value);
-        }
+function setKey(binding, key, value) {
+  if (!key) return;
+
+  if (typeof key === 'string') {
+    binding[key] = value;
+    return;
+  }
+  if (typeof key === 'object' && Array.isArray(key)) {
+    binding[key[0]] = new Array(value);
+    return;
+  }
+  if (typeof key === 'object') {
+    for (const subkey in key) {
+      if (!binding[subkey]) {
+        binding[subkey] = {};
       }
+      setKey(binding[subkey], key[subkey], value);
     }
   }
 }
