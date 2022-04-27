@@ -84,8 +84,9 @@ function getBinding (type, client, id) {
   // read and convert the available binding info
   const binding = {};
   const bindingFiles = fs.readdirSync(bindingsRoot);
-  bindingFiles.forEach((file) => {
-    if (!file.startsWith('..')) {
+  bindingFiles
+    .filter((file) => !file.startsWith('..'))
+    .forEach((file) => {
       let key = file;
       let value =
           fs.readFileSync(path.join(bindingsRoot, file)).toString().trim();
@@ -110,8 +111,7 @@ function getBinding (type, client, id) {
       } else {
         setKey(binding, key, value);
       }
-    }
-  });
+    });
 
   return binding;
 }
