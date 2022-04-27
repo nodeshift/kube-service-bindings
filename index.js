@@ -41,7 +41,7 @@ function setKey(binding, key, value) {
 }
 
 // return the bidings requested
-function getBinding (type, client, id) {
+function getBinding(type, client, id, removeNotMapped = false) {
   // validate we know about the type
   if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
     throw new Error('Unknown service type');
@@ -86,6 +86,16 @@ function getBinding (type, client, id) {
   const bindingFiles = fs.readdirSync(bindingsRoot);
   bindingFiles
     .filter((file) => !file.startsWith('..'))
+    .filter((file) => {
+      // if removeNotMapped is true then
+      // we only want to return in case there is a mapping for this file
+      if (removeNotMapped) {
+        return clientInfo.mapping[file];
+      } else {
+        // otherwise we dont want to filter anything
+        return true;
+      }
+    })
     .forEach((file) => {
       let key = file;
       let value =
