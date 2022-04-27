@@ -91,14 +91,12 @@ function getBinding (type, client, id) {
           fs.readFileSync(path.join(bindingsRoot, file)).toString().trim();
 
       if (client) {
-        if (client && (clientInfo.mapping[key] ||
-                       clientInfo.mapping[key] === '')) {
+        if (clientInfo.mapping[key] || clientInfo.mapping[key] === '') {
           key = clientInfo.mapping[key];
         }
 
         // get the value and map if needed
-        if ((clientInfo.valueMapping) &&
-            (clientInfo.valueMapping[key])) {
+        if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
           value = clientInfo.valueMapping[key][value];
         }
 
