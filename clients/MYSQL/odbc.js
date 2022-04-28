@@ -1,29 +1,26 @@
 module.exports = {
   mapping: {
-    host: 'host',
-    port: 'port',
-    username: 'UID',
+    host: 'server',
     database: 'database',
-    password: 'PWD',
-    type: 'DSN'
+    port: 'port',
+    username: 'user',
+    password: 'password'
   },
   transform: (binding) => {
-    console.log('got called');
     if (
-      binding.host &&
-      binding.port &&
-      binding.UID &&
+      binding.server &&
       binding.database &&
-      binding.PWD
+      binding.port &&
+      binding.user &&
+      binding.password
     ) {
-      console.log('im in');
       binding.connectionString = [
-        `Driver=MySQL`,
-        `Uid=${binding.UID}`,
-        `Pwd=${binding.PWD}`,
-        `Database=${binding.database}`,
-        `Server=${binding.host}`,
-        `Port:${binding.port}`
+        `DRIVER=MySQL`,
+        `SERVER=${binding.server}`,
+        `DATABASE=${binding.database}`,
+        `PORT:${binding.port}`,
+        `USER=${binding.user}`,
+        `PASSWORD=${binding.password}`
       ].join(';');
     }
   }
