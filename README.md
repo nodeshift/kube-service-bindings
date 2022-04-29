@@ -42,6 +42,7 @@ The parameters for `getBinding` include:
     * kafkajs
   * POSTGRESQL
     * pg
+    * odbc
   * REDIS
     * redis
     * ioredis
