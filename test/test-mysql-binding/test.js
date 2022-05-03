@@ -10,8 +10,10 @@ describe('On MySQL Database', () => {
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
   });
 
-  it('fetches credentials for mysql2 client', () => {
-    const binding = bindings.getBinding('MYSQL', 'mysql2');
+  it('fetches Unmapped credentials for mysql2 client', () => {
+    const binding = bindings.getBinding('MYSQL', 'mysql2', {
+      removeUnmapped: false
+    });
     assert(binding);
     assert.deepEqual(binding, {
       clusterIP: 'None',
@@ -34,7 +36,9 @@ describe('On MySQL Database', () => {
   });
 
   it('fetches credentials for mysql2 client filtered by mappings', () => {
-    const binding = bindings.getBinding('MYSQL', 'mysql2', undefined, true);
+    const binding = bindings.getBinding('MYSQL', 'mysql2', {
+      removeUnmapped: true
+    });
     assert(binding);
     assert.deepEqual(binding, {
       host: 'localhost',
