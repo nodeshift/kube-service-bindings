@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { getBindOptions } = require('./utils/index.js');
 
 const typeMapping = {
   KAFKA: 'kafka',
@@ -40,8 +41,13 @@ function setKey(binding, key, value) {
   }
 }
 
-// return the bidings requested
-function getBinding(type, client, id, removeNotMapped = false) {
+// return the bindings requested
+function getBinding(type, client, bindingOptions) {
+
+  const bindOptions = getBindOptions(bindingOptions);
+
+  const id = bindOptions.id
+
   // validate we know about the type
   if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
     throw new Error('Unknown service type');
@@ -72,7 +78,7 @@ function getBinding(type, client, id, removeNotMapped = false) {
             break;
           }
         }
-      } catch (err) { }
+      } catch (err) {}
     }
   }
 
