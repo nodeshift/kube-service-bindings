@@ -51,7 +51,7 @@ function setKey(binding, key, value) {
 function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(bindingOptions);
 
-  const id = bindOptions.id
+  const id = bindOptions.id;
 
   // validate we know about the type
   if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
@@ -97,20 +97,12 @@ function getBinding(type, client, bindingOptions) {
   const bindingFiles = fs.readdirSync(bindingsRoot);
   bindingFiles
     .filter((file) => !file.startsWith('..'))
-    .filter((file) => {
-      // if removeNotMapped is true then
-      // we only want to return in case there is a mapping for this file
-      if (removeNotMapped) {
-        return clientInfo.mapping[file];
-      } else {
-        // otherwise we dont want to filter anything
-        return true;
-      }
-    })
     .forEach((file) => {
       let key = file;
-      let value =
-          fs.readFileSync(path.join(bindingsRoot, file)).toString().trim();
+      let value = fs
+        .readFileSync(path.join(bindingsRoot, file))
+        .toString()
+        .trim();
 
       if (client) {
         if (clientInfo.mapping[key] || clientInfo.mapping[key] === '') {
@@ -133,6 +125,14 @@ function getBinding(type, client, bindingOptions) {
         setKey(binding, key, value);
       }
     });
+
+  if (client && clientInfo.removeUnmapped && bindOptions.removeUnmapped) {
+    return filterObject(binding, Object.values(clientInfo.mapping));
+  }
+
+  if (client && clientInfo.filter && bindOptions.removeUnmapped) {
+    return clientInfo.filter(binding);
+  }
 
   return binding;
 }

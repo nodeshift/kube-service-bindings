@@ -1,5 +1,6 @@
 module.exports = {
   defaultOptions: {
-    id: undefined
+    id: undefined,
+    removeUnmapped: true
   }
 };

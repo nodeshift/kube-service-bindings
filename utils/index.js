@@ -14,14 +14,13 @@ const isArray = function (x) {
 
 const getBindOptions = function (options) {
   if (isString(options)) {
-    return Object.assign(
-      {
-        id: options
-      },
-      defaultOptions
-    );
+    return Object.assign({}, defaultOptions, {
+      id: options
+    });
+  } else if (isObject(options)) {
+    return Object.assign({}, defaultOptions, options);
   } else {
-    return Object.assign(options, defaultOptions);
+    return defaultOptions;
   }
 };
 
