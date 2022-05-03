@@ -5,8 +5,7 @@ const {
   getBindOptions,
   isObject,
   isString,
-  isArray,
-  filterObject
+  isArray
 } = require('./utils/index.js');
 
 const typeMapping = {
@@ -75,10 +74,15 @@ function getBinding(type, client, bindingOptions) {
     const candidates = fs.readdirSync(root);
     for (const file of candidates) {
       try {
-        const bindingType =
-          fs.readFileSync(path.join(root, file, 'type')).toString().trim();
-        if (bindingType === typeMapping[type] || aliases[typeMapping[type]].includes(bindingType)) {
-          if ((id === undefined) || file.includes(id)) {
+        const bindingType = fs
+          .readFileSync(path.join(root, file, 'type'))
+          .toString()
+          .trim();
+        if (
+          bindingType === typeMapping[type] ||
+          aliases[typeMapping[type]].includes(bindingType)
+        ) {
+          if (id === undefined || file.includes(id)) {
             bindingsRoot = path.join(root, file);
             break;
           }
@@ -125,10 +129,6 @@ function getBinding(type, client, bindingOptions) {
         setKey(binding, key, value);
       }
     });
-
-  if (client && clientInfo.removeUnmapped && bindOptions.removeUnmapped) {
-    return filterObject(binding, Object.values(clientInfo.mapping));
-  }
 
   if (client && clientInfo.filter && bindOptions.removeUnmapped) {
     return clientInfo.filter(binding);
