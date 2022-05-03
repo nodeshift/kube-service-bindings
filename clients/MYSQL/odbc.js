@@ -2,7 +2,7 @@ const { filterObject } = require('../../utils/index.js');
 
 module.exports = {
   mapping: {
-    host: 'server',
+    host: 'host',
     database: 'database',
     port: 'port',
     username: 'user',
@@ -10,7 +10,7 @@ module.exports = {
   },
   transform: (binding) => {
     if (
-      binding.server &&
+      binding.host &&
       binding.database &&
       binding.port &&
       binding.user &&
@@ -18,7 +18,7 @@ module.exports = {
     ) {
       binding.connectionString = [
         `DRIVER=MySQL`,
-        `SERVER=${binding.server}`,
+        `SERVER=${binding.host}`,
         `DATABASE=${binding.database}`,
         `PORT:${binding.port}`,
         `USER=${binding.user}`,
