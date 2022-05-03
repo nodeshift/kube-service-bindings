@@ -1,3 +1,5 @@
+const { filterObject } = require('../../utils/index.js');
+
 module.exports = {
   mapping: {
     host: 'server',
@@ -23,5 +25,8 @@ module.exports = {
         `PASSWORD=${binding.password}`
       ].join(';');
     }
+  },
+  filter: (binding) => {
+    return filterObject(binding, ['connectionString']);
   }
 };
