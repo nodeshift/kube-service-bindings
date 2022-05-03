@@ -1,7 +1,13 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { getBindOptions } = require('./utils/index.js');
+const {
+  getBindOptions,
+  isObject,
+  isString,
+  isArray,
+  filterObject
+} = require('./utils/index.js');
 
 const typeMapping = {
   KAFKA: 'kafka',
@@ -23,15 +29,15 @@ const aliases = {
 function setKey(binding, key, value) {
   if (!key) return;
 
-  if (typeof key === 'string') {
+  if (isString(key)) {
     binding[key] = value;
     return;
   }
-  if (typeof key === 'object' && Array.isArray(key)) {
+  if (isArray(key)) {
     binding[key[0]] = new Array(value);
     return;
   }
-  if (typeof key === 'object') {
+  if (isObject(key)) {
     for (const subkey in key) {
       if (!binding[subkey]) {
         binding[subkey] = {};
@@ -43,7 +49,6 @@ function setKey(binding, key, value) {
 
 // return the bindings requested
 function getBinding(type, client, bindingOptions) {
-
   const bindOptions = getBindOptions(bindingOptions);
 
   const id = bindOptions.id
