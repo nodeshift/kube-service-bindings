@@ -19,6 +19,7 @@
     "index.js",
     "index.d.ts",
     "clients/",
+    "utils/",
     "package-support.json",
     "LICENSE"
   ],
