@@ -20,6 +20,7 @@
     "index.d.ts",
     "clients/",
     "utils/",
+    "options/",
     "package-support.json",
     "LICENSE"
   ],
