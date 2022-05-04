@@ -1,3 +1,5 @@
+const { filterObject } = require('../../utils/index.js');
+
 module.exports = {
   mapping: {
     user: 'user',
@@ -11,20 +13,23 @@ module.exports = {
   },
   transform: (binding) => {
     if (
-      binding.user &&
       binding.host &&
       binding.database &&
-      binding.password &&
-      binding.port
+      binding.port &&
+      binding.user &&
+      binding.password
     ) {
       binding.connectionString = [
         `DRIVER=PostgreSQL`,
-        `USER=${binding.user}`,
         `SERVER=${binding.host}`,
         `DATABASE=${binding.database}`,
-        `PASSWORD=${binding.password}`,
-        `PORT:${binding.port}`
+        `PORT:${binding.port}`,
+        `USER=${binding.user}`,
+        `PASSWORD=${binding.password}`
       ].join(';');
     }
+  },
+  filter: (binding) => {
+    return filterObject(binding, ['connectionString']);
   }
 };
