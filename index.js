@@ -1,13 +1,20 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const {
+  getBindOptions,
+  isObject,
+  isString,
+  isArray
+} = require('./utils/index.js');
 
 const typeMapping = {
   KAFKA: 'kafka',
   POSTGRESQL: 'postgresql',
   REDIS: 'redis',
   MONGODB: 'mongodb',
-  AMQP: 'amqp'
+  AMQP: 'amqp',
+  MYSQL: 'mysql'
 };
 
 const aliases = {
@@ -18,27 +25,33 @@ const aliases = {
 // either set the value directly on the binding object
 // passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
-function setKey (binding, key, value) {
-  if (key) {
-    if (typeof key === 'string') {
-      binding[key] = value;
-    } else if (typeof key === 'object') {
-      if (Array.isArray(key)) {
-        binding[key[0]] = new Array(value);
-      } else {
-        for (const subkey in key) {
-          if (!binding[subkey]) {
-            binding[subkey] = {};
-          }
-          setKey(binding[subkey], key[subkey], value);
-        }
+function setKey(binding, key, value) {
+  if (!key) return;
+
+  if (isString(key)) {
+    binding[key] = value;
+    return;
+  }
+  if (isArray(key)) {
+    binding[key[0]] = new Array(value);
+    return;
+  }
+  if (isObject(key)) {
+    for (const subkey in key) {
+      if (!binding[subkey]) {
+        binding[subkey] = {};
       }
+      setKey(binding[subkey], key[subkey], value);
     }
   }
 }
 
-// return the bidings requested
-function getBinding (type, client, id) {
+// return the bindings requested
+function getBinding(type, client, bindingOptions) {
+  const bindOptions = getBindOptions(bindingOptions);
+
+  const id = bindOptions.id;
+
   // validate we know about the type
   if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
     throw new Error('Unknown service type');
@@ -61,15 +74,20 @@ function getBinding (type, client, id) {
     const candidates = fs.readdirSync(root);
     for (const file of candidates) {
       try {
-        const bindingType =
-          fs.readFileSync(path.join(root, file, 'type')).toString().trim();
-        if (bindingType === typeMapping[type] || aliases[typeMapping[type]].includes(bindingType)) {
-          if ((id === undefined) || file.includes(id)) {
+        const bindingType = fs
+          .readFileSync(path.join(root, file, 'type'))
+          .toString()
+          .trim();
+        if (
+          bindingType === typeMapping[type] ||
+          aliases[typeMapping[type]].includes(bindingType)
+        ) {
+          if (id === undefined || file.includes(id)) {
             bindingsRoot = path.join(root, file);
             break;
           }
         }
-      } catch (err) { }
+      } catch (err) {}
     }
   }
 
@@ -81,21 +99,22 @@ function getBinding (type, client, id) {
   // read and convert the available binding info
   const binding = {};
   const bindingFiles = fs.readdirSync(bindingsRoot);
-  bindingFiles.forEach((file) => {
-    if (!file.startsWith('..')) {
+  bindingFiles
+    .filter((file) => !file.startsWith('..'))
+    .forEach((file) => {
       let key = file;
-      let value =
-          fs.readFileSync(path.join(bindingsRoot, file)).toString().trim();
+      let value = fs
+        .readFileSync(path.join(bindingsRoot, file))
+        .toString()
+        .trim();
 
       if (client) {
-        if (client && (clientInfo.mapping[key] ||
-                       clientInfo.mapping[key] === '')) {
+        if (clientInfo.mapping[key] || clientInfo.mapping[key] === '') {
           key = clientInfo.mapping[key];
         }
 
         // get the value and map if needed
-        if ((clientInfo.valueMapping) &&
-            (clientInfo.valueMapping[key])) {
+        if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
           value = clientInfo.valueMapping[key][value];
         }
 
@@ -109,8 +128,11 @@ function getBinding (type, client, id) {
       } else {
         setKey(binding, key, value);
       }
-    }
-  });
+    });
+
+  if (client && clientInfo.filter && bindOptions.removeUnmapped) {
+    return clientInfo.filter(binding);
+  }
 
   return binding;
 }
