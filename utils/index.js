@@ -1,28 +1,44 @@
 const { defaultOptions } = require('../options/defaultOptions');
 
+const getType = function (x) {
+  return Object.prototype.toString.call(x).slice(8, -1);
+};
+
 const isString = function (x) {
-  return !!(typeof x === 'string' || x instanceof String);
+  return getType(x) === 'String';
 };
 
 const isObject = function (x) {
-  return typeof x === 'object' && !Array.isArray(x) && x !== null;
+  return getType(x) === 'Object';
 };
 
 const isArray = function (x) {
-  return Array.isArray(x);
+  return getType(x) === 'Array';
 };
 
-const getBindOptions = function (options) {
-  if (isString(options)) {
+function getBindOptions(options) {
+  const type = getType(options);
+
+  const isString = function () {
     return Object.assign({}, defaultOptions, {
       id: options
     });
-  } else if (isObject(options)) {
+  };
+
+  const isObject = function () {
     return Object.assign({}, defaultOptions, options);
-  } else {
-    return defaultOptions;
-  }
-};
+  };
+
+  const resolveOptions = {
+    String: isString,
+    Object: isObject,
+    default: function () {
+      return defaultOptions;
+    }
+  };
+
+  return (resolveOptions[type] || resolveOptions.default)();
+}
 
 const filterObject = function (object, keys) {
   return Object.keys(object)
@@ -59,9 +75,6 @@ const setKey = function (binding, key, value) {
 };
 
 module.exports = {
-  isString,
-  isObject,
-  isArray,
   getBindOptions,
   filterObject,
   setKey
