@@ -70,25 +70,28 @@ function getBinding(type, client, bindingOptions) {
   // find the matching binding
   let bindingsRoot = null;
   const root = process.env.SERVICE_BINDING_ROOT;
-  if (root) {
-    const candidates = fs.readdirSync(root);
-    for (const file of candidates) {
-      try {
-        const bindingType = fs
-          .readFileSync(path.join(root, file, 'type'))
-          .toString()
-          .trim();
-        if (
-          bindingType === typeMapping[type] ||
-          aliases[typeMapping[type]].includes(bindingType)
-        ) {
-          if (id === undefined || file.includes(id)) {
-            bindingsRoot = path.join(root, file);
-            break;
-          }
+
+  if (!root) {
+    throw new Error('No SERVICE_BINDING_ROOT env variable Found');
+  }
+
+  const candidates = fs.readdirSync(root);
+  for (const file of candidates) {
+    try {
+      const bindingType = fs
+        .readFileSync(path.join(root, file, 'type'))
+        .toString()
+        .trim();
+      if (
+        bindingType === typeMapping[type] ||
+        aliases[typeMapping[type]].includes(bindingType)
+      ) {
+        if (id === undefined || file.includes(id)) {
+          bindingsRoot = path.join(root, file);
+          break;
         }
-      } catch (err) {}
-    }
+      }
+    } catch (err) {}
   }
 
   // bail if we did not find a binding
