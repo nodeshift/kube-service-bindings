@@ -4,18 +4,6 @@ const getType = function (x) {
   return Object.prototype.toString.call(x).slice(8, -1);
 };
 
-const isString = function (x) {
-  return getType(x) === 'String';
-};
-
-const isObject = function (x) {
-  return getType(x) === 'Object';
-};
-
-const isArray = function (x) {
-  return getType(x) === 'Array';
-};
-
 function getBindOptions(options) {
   const type = getType(options);
 
@@ -54,24 +42,33 @@ const filterObject = function (object, keys) {
 // passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
 const setKey = function (binding, key, value) {
-  if (!key) return;
+  const type = getType(key);
 
-  if (isString(key)) {
+  const isString = function () {
+    if (!key) return;
     binding[key] = value;
-    return;
-  }
-  if (isArray(key)) {
+  };
+
+  const isArray = function () {
     binding[key[0]] = new Array(value);
-    return;
-  }
-  if (isObject(key)) {
+  };
+
+  const isObject = function () {
     for (const subkey in key) {
       if (!binding[subkey]) {
         binding[subkey] = {};
       }
       setKey(binding[subkey], key[subkey], value);
     }
-  }
+  };
+
+  const bindings = {
+    String: isString,
+    Array: isArray,
+    Object: isObject,
+    default: function () {}
+  };
+  return (bindings[type] || bindings.default)();
 };
 
 module.exports = {
