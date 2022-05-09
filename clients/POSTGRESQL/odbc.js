@@ -23,9 +23,10 @@ module.exports = {
         `DRIVER=PostgreSQL`,
         `SERVER=${binding.host}`,
         `DATABASE=${binding.database}`,
-        `PORT:${binding.port}`,
+        `PORT=${binding.port}`,
         `USER=${binding.user}`,
-        `PASSWORD=${binding.password}`
+        `PASSWORD=${binding.password}`,
+        `sslmode=prefer`
       ].join(';');
     }
   },
