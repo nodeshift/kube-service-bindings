@@ -15,4 +15,3 @@ export function getBinding(service: 'REDIS', client: 'ioredis'): RedisOptions;
 export function getBinding(service: 'MONGODB', client: 'mongodb'): MongoClientOptions;
 export function getBinding(service: 'AMQP', client: 'rhea'): rheaConnectionOptions;
 export function getBinding(service: 'MYSQL', client: 'mysql2'): mysql2ConnectionOptions;
-export function getBinding(service: 'MYSQL', client: 'mysql'): mysql2ConnectionOptions;
