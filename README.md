@@ -49,6 +49,7 @@ The parameters for `getBinding` include:
   * AMQP
     * rhea
   * MYSQL
+    * mysql
     * mysql2
 
   If you don't specify a client, the object returned will
