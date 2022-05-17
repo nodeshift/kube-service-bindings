@@ -6,6 +6,7 @@ import { RedisOptions } from 'ioredis';
 import { MongoClientOptions } from 'mongodb';
 import { ConnectionOptions as rheaConnectionOptions} from 'rhea';
 import { ConnectionOptions as mysql2ConnectionOptions} from 'mysql2';
+import { ConnectionParameters } from 'odbc';
 
 export function getBinding(service: 'KAFKA', client: 'node-rdkafka'): GlobalConfig;
 export function getBinding(service: 'KAFKA', client: 'kafkajs'): KafkaConfig;
@@ -15,3 +16,4 @@ export function getBinding(service: 'REDIS', client: 'ioredis'): RedisOptions;
 export function getBinding(service: 'MONGODB', client: 'mongodb'): MongoClientOptions;
 export function getBinding(service: 'AMQP', client: 'rhea'): rheaConnectionOptions;
 export function getBinding(service: 'MYSQL', client: 'mysql2'): mysql2ConnectionOptions;
+export function getBinding(service: 'MYSQL', client: 'odbc'): ConnectionParameters;

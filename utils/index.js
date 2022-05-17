@@ -33,10 +33,36 @@ const filterObject = function (object, keys) {
     }, {});
 };
 
+// depending on the type of the key this will
+// either set the value directly on the binding object
+// passed in or create a sub-object on the binding and
+// then call setKey recursively to set the value
+const setKey = function (binding, key, value) {
+  if (!key) return;
+
+  if (isString(key)) {
+    binding[key] = value;
+    return;
+  }
+  if (isArray(key)) {
+    binding[key[0]] = new Array(value);
+    return;
+  }
+  if (isObject(key)) {
+    for (const subkey in key) {
+      if (!binding[subkey]) {
+        binding[subkey] = {};
+      }
+      setKey(binding[subkey], key[subkey], value);
+    }
+  }
+};
+
 module.exports = {
   isString,
   isObject,
   isArray,
   getBindOptions,
-  filterObject
+  filterObject,
+  setKey
 };

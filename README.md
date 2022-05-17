@@ -13,56 +13,58 @@ to be familiar with service bindings.
 The package provides the `getBinding` method which does roughly
 the following:
 
-* Looks for the $SERVICE_BINDING_ROOT variable in order
+- Looks for the $SERVICE_BINDING_ROOT variable in order
   to determine if bindings are available.
-* Reads the info from the files. 
-* Maps the names of the files to the options names needed by the
-  Node.js clients that will connect to the service.  
+- Reads the info from the files.
+- Maps the names of the files to the options names needed by the
+  Node.js clients that will connect to the service.
 
 The parameters for `getBinding` include:
 
-* `type` - The type of service for which a binding is being
+- `type` - The type of service for which a binding is being
   requested. Currently the supported types are:
-  * 'KAFKA'
-  * 'POSTGRESQL'
-  * 'REDIS'
-  * 'MONGODB'
-  * 'AMQP'
-  * 'MYSQL'
 
-* `client` - the package the application is using to connect
+  - 'KAFKA'
+  - 'POSTGRESQL'
+  - 'REDIS'
+  - 'MONGODB'
+  - 'AMQP'
+  - 'MYSQL'
+
+- `client` - the package the application is using to connect
   to the service. kube-service-bindings is aware of a
   subset of possible packages. For those that it is aware
-  of, it can map the service bindings into the form 
+  of, it can map the service bindings into the form
   required by the client. Currently the following clients
   are recognized based on the supported types:
-  * KAFKA
-    * node-rdkafka
-    * kafkajs
-  * POSTGRESQL
-    * pg
-  * REDIS
-    * redis
-    * ioredis
-  * MONGODB
-    * mongodb
-  * AMQP
-    * rhea
-  * MYSQL
-    * mysql
-    * mysql2
+
+  - KAFKA
+    - node-rdkafka
+    - kafkajs
+  - POSTGRESQL
+    - pg
+  - REDIS
+    - redis
+    - ioredis
+  - MONGODB
+    - mongodb
+  - AMQP
+    - rhea
+  - MYSQL
+    - mysql2
+    - odbc
 
   If you don't specify a client, the object returned will
   be a direct map from the bindings, with the keys
   corresponding to the name of each file provided by the
   binding.
 
-* `id` - option id that is used to filter the available
+- `id` - option id that is used to filter the available
   bindings in the search. Most useful for testing where
   you might have more than one binding of a given type
   available.
 
-This is an example of how kube-service-bindings  might
+This is an example of how kube-service-bindings might
 be used:
 
 ```JavaScript
