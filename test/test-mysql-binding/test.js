@@ -3,6 +3,12 @@ const path = require('path');
 const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
+const {
+  bindedFiles,
+  connectionCredentials,
+  connectionString
+} = require('./assertions');
+
 describe('On MySQL Database', () => {
   let env;
   before(() => {
@@ -15,24 +21,7 @@ describe('On MySQL Database', () => {
       removeUnmapped: false
     });
     assert(binding);
-    assert.deepEqual(binding, {
-      clusterIP: 'None',
-      clustercheck: 'clustercheckpassword',
-      monitor: 'monitory',
-      operator: 'operatoradmin',
-      pmmserver: 'admin',
-      provider: 'percona',
-      proxyadmin: 'admin_password',
-      replication: 'repl_password',
-      root: 'root_password',
-      xtrabackup: 'backup_password',
-      host: 'localhost',
-      port: 3306,
-      database: 'test',
-      user: 'root',
-      password: 'password',
-      type: 'mysql'
-    });
+    assert.deepEqual(binding, bindedFiles);
   });
 
   it('fetches credentials for mysql2 client filtered by mappings', () => {
@@ -40,13 +29,13 @@ describe('On MySQL Database', () => {
       removeUnmapped: true
     });
     assert(binding);
-    assert.deepEqual(binding, {
-      host: 'localhost',
-      port: 3306,
-      database: 'test',
-      user: 'root',
-      password: 'password'
-    });
+    assert.deepEqual(binding, connectionCredentials);
+  });
+
+  it('fetches credentials for mysql2 client, default behavior.', () => {
+    const binding = bindings.getBinding('MYSQL', 'mysql2');
+    assert(binding);
+    assert.deepEqual(binding, connectionCredentials);
   });
 
   it('fetches Unmapped credentials for mysql client', () => {
@@ -54,24 +43,7 @@ describe('On MySQL Database', () => {
       removeUnmapped: false
     });
     assert(binding);
-    assert.deepEqual(binding, {
-      clusterIP: 'None',
-      clustercheck: 'clustercheckpassword',
-      monitor: 'monitory',
-      operator: 'operatoradmin',
-      pmmserver: 'admin',
-      provider: 'percona',
-      proxyadmin: 'admin_password',
-      replication: 'repl_password',
-      root: 'root_password',
-      xtrabackup: 'backup_password',
-      host: 'localhost',
-      port: 3306,
-      database: 'test',
-      user: 'root',
-      password: 'password',
-      type: 'mysql'
-    });
+    assert.deepEqual(binding, bindedFiles);
   });
 
   it('fetches credentials for mysql client filtered by mappings', () => {
@@ -79,12 +51,41 @@ describe('On MySQL Database', () => {
       removeUnmapped: true
     });
     assert(binding);
+    assert.deepEqual(binding, connectionCredentials);
+  });
+
+  it('fetches credentials for mysql client, default behavior', () => {
+    const binding = bindings.getBinding('MYSQL', 'mysql');
+    assert(binding);
+    assert.deepEqual(binding, connectionCredentials);
+  });
+
+  it('ODBC Client for MySQL fetching credentials NOT filtered by mappings', () => {
+    const binding = bindings.getBinding('MYSQL', 'odbc', {
+      removeUnmapped: false
+    });
+    assert(binding);
     assert.deepEqual(binding, {
-      host: 'localhost',
-      port: 3306,
-      database: 'test',
-      user: 'root',
-      password: 'password'
+      ...bindedFiles,
+      connectionString
+    });
+  });
+
+  it('ODBC Client for Mysql, fetching credentials filtered by mappings', () => {
+    const binding = bindings.getBinding('MYSQL', 'odbc', {
+      removeUnmapped: true
+    });
+    assert(binding);
+    assert.deepEqual(binding, {
+      connectionString
+    });
+  });
+
+  it('ODBC Client for Mysql, fetching credentials, default behavior', () => {
+    const binding = bindings.getBinding('MYSQL', 'odbc');
+    assert(binding);
+    assert.deepEqual(binding, {
+      connectionString
     });
   });
 
