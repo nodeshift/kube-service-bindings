@@ -37,22 +37,22 @@ The parameters for `getBinding` include:
   of, it can map the service bindings into the form
   required by the client. Currently the following clients
   are recognized based on the supported types:
-
-  - KAFKA
-    - node-rdkafka
-    - kafkajs
-  - POSTGRESQL
-    - pg
-  - REDIS
-    - redis
-    - ioredis
-  - MONGODB
-    - mongodb
-  - AMQP
-    - rhea
-  - MYSQL
-    - mysql2
-    - odbc
+  * KAFKA
+    * node-rdkafka
+    * kafkajs
+  * POSTGRESQL
+    * pg
+  * REDIS
+    * redis
+    * ioredis
+  * MONGODB
+    * mongodb
+  * AMQP
+    * rhea
+  * MYSQL
+    * mysql
+    * mysql2
+    * odbc
 
   If you don't specify a client, the object returned will
   be a direct map from the bindings, with the keys
