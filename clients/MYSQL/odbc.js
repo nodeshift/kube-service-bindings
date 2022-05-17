@@ -20,7 +20,7 @@ module.exports = {
         `DRIVER=MySQL`,
         `SERVER=${binding.host}`,
         `DATABASE=${binding.database}`,
-        `PORT:${binding.port}`,
+        `PORT=${binding.port}`,
         `USER=${binding.user}`,
         `PASSWORD=${binding.password}`
       ].join(';');
