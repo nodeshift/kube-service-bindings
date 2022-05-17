@@ -32,6 +32,12 @@ describe('On MySQL Database', () => {
     assert.deepEqual(binding, connectionCredentials);
   });
 
+  it('fetches credentials for mysql2 client, default behavior.', () => {
+    const binding = bindings.getBinding('MYSQL', 'mysql2');
+    assert(binding);
+    assert.deepEqual(binding, connectionCredentials);
+  });
+
   it('fetches Unmapped credentials for mysql client', () => {
     const binding = bindings.getBinding('MYSQL', 'mysql', {
       removeUnmapped: false
@@ -44,6 +50,12 @@ describe('On MySQL Database', () => {
     const binding = bindings.getBinding('MYSQL', 'mysql', {
       removeUnmapped: true
     });
+    assert(binding);
+    assert.deepEqual(binding, connectionCredentials);
+  });
+
+  it('fetches credentials for mysql client, default behavior', () => {
+    const binding = bindings.getBinding('MYSQL', 'mysql');
     assert(binding);
     assert.deepEqual(binding, connectionCredentials);
   });
@@ -63,6 +75,14 @@ describe('On MySQL Database', () => {
     const binding = bindings.getBinding('MYSQL', 'odbc', {
       removeUnmapped: true
     });
+    assert(binding);
+    assert.deepEqual(binding, {
+      connectionString
+    });
+  });
+
+  it('ODBC Client for Mysql, fetching credentials, default behavior', () => {
+    const binding = bindings.getBinding('MYSQL', 'odbc');
     assert(binding);
     assert.deepEqual(binding, {
       connectionString
