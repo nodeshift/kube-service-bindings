@@ -7,28 +7,35 @@ module.exports = {
     database: 'database',
     password: 'password',
     port: 'port',
-    'ca.crt': { ssl: 'ca' },
-    'tls.key': { ssl: 'key' },
-    'tls.crt': { ssl: 'cert' }
+    'ca.crt': 'sslrootcert',
+    'tls.crt': 'sslcert',
+    'tls.key': 'sslkey'
+  },
+  valueFilepath: {
+    sslrootcert: true,
+    sslcert: true,
+    sslkey: true
   },
   transform: (binding) => {
-    if (
-      binding.host &&
-      binding.database &&
-      binding.port &&
-      binding.user &&
-      binding.password
-    ) {
-      binding.connectionString = [
-        `DRIVER=PostgreSQL`,
-        `SERVER=${binding.host}`,
-        `DATABASE=${binding.database}`,
-        `PORT=${binding.port}`,
-        `USER=${binding.user}`,
-        `PASSWORD=${binding.password}`,
-        `sslmode=prefer`
-      ].join(';');
-    }
+
+    const pqopt = [
+      `{`,
+      `sslrootcert=${binding.sslrootcert}`,
+      `sslcert=${binding.sslcert}`,
+      `sslkey=${binding.sslkey}`,
+      `}`
+    ].join(' ');
+
+    binding.connectionString = [
+      `Pqopt=${pqopt}`,
+      `DRIVER=PostgreSQL`,
+      `Servername=${binding.host}`,
+      `DATABASE=${binding.database}`,
+      `Port=${binding.port}`,
+      `Username=${binding.user}`,
+      `Password=${binding.password}`,
+      `SSLmode=verify-ca`
+    ].join(';');
   },
   filter: (binding) => {
     return filterObject(binding, ['connectionString']);

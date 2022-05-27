@@ -76,14 +76,16 @@ function getBinding(type, client, bindingOptions) {
     .filter((file) => !file.startsWith('..'))
     .forEach((file) => {
       let key = file;
-      let value = fs
-        .readFileSync(path.join(bindingsRoot, file))
-        .toString()
-        .trim();
+      const filepath = path.join(bindingsRoot, file);
+      let value = fs.readFileSync(filepath).toString().trim();
 
       if (client) {
         if (clientInfo.mapping[key] || clientInfo.mapping[key] === '') {
           key = clientInfo.mapping[key];
+        }
+
+        if (clientInfo.valueFilepath && clientInfo.valueFilepath[key]) {
+          value = filepath;
         }
 
         // get the value and map if needed
