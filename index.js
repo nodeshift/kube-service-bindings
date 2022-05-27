@@ -90,19 +90,17 @@ function getBinding(type, client, bindingOptions) {
         if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
           value = clientInfo.valueMapping[key][value];
         }
-
-        // set the key
-        setKey(binding, key, value);
-
-        // do any final transforms needed
-        if (clientInfo.transform) {
-          clientInfo.transform(binding);
-        }
-      } else {
-        setKey(binding, key, value);
       }
+
+      setKey(binding, key, value);
     });
 
+  // do any final transforms needed
+  if (client && clientInfo.transform) {
+    clientInfo.transform(binding);
+  }
+
+  // do any final filter needed
   if (client && clientInfo.filter && bindOptions.removeUnmapped) {
     return clientInfo.filter(binding);
   }
