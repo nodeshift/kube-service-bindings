@@ -43,7 +43,7 @@ describe('On MySQL Database', () => {
       removeUnmapped: false
     });
     assert(binding);
-    assert.deepEqual(binding, bindedFiles);
+    assert.deepEqual(binding, { ...bindedFiles, connectionString });
   });
 
   it('fetches credentials for odbc client in MySQL filtered by mappings', () => {
@@ -51,7 +51,7 @@ describe('On MySQL Database', () => {
       removeUnmapped: true
     });
     assert(binding);
-    assert.deepEqual(binding, connectionCredentials);
+    assert.deepEqual(binding, { connectionString });
   });
 
   it('fetches credentials for mysql client, default behavior', () => {
