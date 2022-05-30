@@ -73,18 +73,24 @@ function getBinding(type, client, bindingOptions) {
   const binding = {};
   const bindingFiles = fs.readdirSync(bindingsRoot);
   bindingFiles
-    .filter((file) => !file.startsWith('..'))
-    .forEach((file) => {
-      let key = file;
-      const filepath = path.join(bindingsRoot, file);
-      let value = fs.readFileSync(filepath).toString().trim();
+    .filter((filename) => !filename.startsWith('..'))
+    .forEach((filename) => {
+      const filepath = path.join(bindingsRoot, filename);
+      const fileContent = fs.readFileSync(filepath).toString().trim();
+
+      let key = filename;
+      let value = fileContent;
 
       if (client) {
-        if (clientInfo.mapping[key] || clientInfo.mapping[key] === '') {
-          key = clientInfo.mapping[key];
+        if (
+          clientInfo.mapping[filename] ||
+          clientInfo.mapping[filename] === ''
+        ) {
+          key =
+            clientInfo.mapping[filename].key || clientInfo.mapping[filename];
         }
 
-        if (clientInfo.valueFilepath && clientInfo.valueFilepath[key]) {
+        if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
           value = filepath;
         }
 
