@@ -1,7 +1,12 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { getBindOptions, setKey } = require('./utils/index.js');
+const {
+  getBindOptions,
+  setKey,
+  getKeyMapping,
+  getValueMapping
+} = require('./utils/index.js');
 
 const typeMapping = {
   KAFKA: 'kafka',
@@ -78,27 +83,20 @@ function getBinding(type, client, bindingOptions) {
       const filepath = path.join(bindingsRoot, filename);
       const fileContent = fs.readFileSync(filepath).toString().trim();
 
-      let key = filename;
-      let value = fileContent;
+      const key = getKeyMapping({
+        client,
+        clientInfo,
+        filename
+      });
 
-      if (client) {
-        if (
-          clientInfo.mapping[filename] ||
-          clientInfo.mapping[filename] === ''
-        ) {
-          key =
-            clientInfo.mapping[filename].key || clientInfo.mapping[filename];
-        }
-
-        if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
-          value = filepath;
-        }
-
-        // get the value and map if needed
-        if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
-          value = clientInfo.valueMapping[key][value];
-        }
-      }
+      const value = getValueMapping({
+        client,
+        clientInfo,
+        filename,
+        filepath,
+        fileContent,
+        key
+      });
 
       setKey(binding, key, value);
     });

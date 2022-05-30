@@ -71,8 +71,44 @@ const setKey = function (binding, key, value) {
   return (bindings[type] || bindings.default)();
 };
 
+function getKeyMapping({ client, clientInfo, filename }) {
+  if (!client) {
+    return filename;
+  }
+  if (clientInfo.mapping[filename] || clientInfo.mapping[filename] === '') {
+    return clientInfo.mapping[filename].key || clientInfo.mapping[filename];
+  }
+  return filename;
+}
+
+function getValueMapping({
+  client,
+  clientInfo,
+  filename,
+  filepath,
+  key,
+  fileContent
+}) {
+  if (!client) {
+    return fileContent;
+  }
+
+  if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
+    return filepath;
+  }
+
+  // get the value and map if needed
+  if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
+    return clientInfo.valueMapping[key][fileContent];
+  }
+
+  return fileContent;
+}
+
 module.exports = {
   getBindOptions,
   filterObject,
-  setKey
+  setKey,
+  getKeyMapping,
+  getValueMapping
 };
