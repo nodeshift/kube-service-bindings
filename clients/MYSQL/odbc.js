@@ -17,7 +17,7 @@ module.exports = {
       binding.password
     ) {
       binding.connectionString = [
-        `DRIVER=MySQL`,
+        'DRIVER=MySQL',
         `SERVER=${binding.host}`,
         `DATABASE=${binding.database}`,
         `PORT=${binding.port}`,

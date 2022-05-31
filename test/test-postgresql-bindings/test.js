@@ -82,14 +82,14 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = `tls.key`;
+    const sslkey = 'tls.key';
 
     const pqopt = [
-      `{`,
+      '{',
       `sslrootcert=${sslrootcert}`,
       `sslcert=${sslcert}`,
       `sslkey=${sslkey}`,
-      `}`
+      '}'
     ].join(' ');
 
     const validationObject = {
@@ -110,14 +110,14 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = `tls.key`;
+    const sslkey = 'tls.key';
 
     const pqopt = [
-      `{`,
+      '{',
       `sslrootcert=${sslrootcert}`,
       `sslcert=${sslcert}`,
       `sslkey=${sslkey}`,
-      `}`
+      '}'
     ].join(' ');
 
     const validationObject = {
@@ -133,14 +133,14 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = `tls.key`;
+    const sslkey = 'tls.key';
 
     const pqopt = [
-      `{`,
+      '{',
       `sslrootcert=${sslrootcert}`,
       `sslcert=${sslcert}`,
       `sslkey=${sslkey}`,
-      `}`
+      '}'
     ].join(' ');
 
     const validationObject = {

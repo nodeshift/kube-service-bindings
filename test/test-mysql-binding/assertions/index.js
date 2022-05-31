@@ -2,7 +2,7 @@ module.exports = {
   bindedFiles: {
     'auto-config.cnf':
       '[mysqld]\ninnodb_buffer_pool_size = 750000000\nmax_connections = 79',
-    'ca.crt': `-----BEGIN CERTIFICATE-----\nFGH\n-----END CERTIFICATE-----`,
+    'ca.crt': '-----BEGIN CERTIFICATE-----\nFGH\n-----END CERTIFICATE-----',
     clustercheck: 'clustercheckpassword',
     clusterIP: 'None',
     database: 'test',
@@ -16,8 +16,9 @@ module.exports = {
     proxyadmin: 'admin_password',
     replication: 'repl_password',
     root: 'root_password',
-    'tls.crt': `-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----`,
-    'tls.key': `-----BEGIN RSA PRIVATE KEY-----\nCDE\n-----END RSA PRIVATE KEY-----`,
+    'tls.crt': '-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----',
+    'tls.key':
+      '-----BEGIN RSA PRIVATE KEY-----\nCDE\n-----END RSA PRIVATE KEY-----',
     type: 'mysql',
     user: 'root',
     xtrabackup: 'backup_password'
