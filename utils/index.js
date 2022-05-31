@@ -1,4 +1,6 @@
 const { defaultOptions } = require('../options/defaultOptions');
+const fs = require('fs');
+const path = require('path');
 
 const getType = function (x) {
   return Object.prototype.toString.call(x).slice(8, -1);
@@ -81,19 +83,22 @@ function getKeyMapping({ client, clientInfo, filename }) {
   return filename;
 }
 
-function getValueMapping({
-  client,
-  clientInfo,
-  filename,
-  filepath,
-  key,
-  fileContent
-}) {
+function getValueMapping({ client, clientInfo, bindingsRoot, filename, key }) {
+  const filepath = path.join(bindingsRoot, filename);
+
+  const fileContent = fs.readFileSync(filepath).toString().trim();
+
   if (!client) {
     return fileContent;
   }
 
   if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
+    if (clientInfo.mapping[filename].copy) {
+      const newFilepath = path.join('.', path.basename(filepath));
+      fs.copyFileSync(filepath, newFilepath);
+      fs.chmodSync(newFilepath, 0o600);
+      return newFilepath;
+    }
     return filepath;
   }
 

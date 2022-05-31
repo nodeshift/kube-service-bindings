@@ -220,5 +220,5 @@ B70+jPy77U8m5LUOAiALzKdUq8zPDlLeIlS4Bq2eTbe0Iouc9mMszcFFzO4vEg==
     verifier:
       'SCRAM-SHA-256$4096:5iwkKQp8vScS+FelWG4sqg==$UdLEmGRCM44fHUVnwq9vPC1Zk/0eRABJP8OGyaNKWJE=:6Zcv32v7WwXKAisWUs7JYv/uh6nclf1LA6voZKbJCjk='
   },
-  connectionString: `DRIVER=PostgreSQL;Servername=hippo-primary.postgres-operator.svc;DATABASE=hippo;Port=5432;Username=hippo;Password=n[gGI-lYrF))Xg?YD85^)[:};sslmode=verify-ca`
+  connectionString: `DRIVER=PostgreSQL;Servername=hippo-primary.postgres-operator.svc;DATABASE=hippo;Port=5432;Username=hippo;Password=n[gGI-lYrF))Xg?YD85^)[:};SSLmode=verify-full`
 };

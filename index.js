@@ -80,9 +80,6 @@ function getBinding(type, client, bindingOptions) {
   bindingFiles
     .filter((filename) => !filename.startsWith('..'))
     .forEach((filename) => {
-      const filepath = path.join(bindingsRoot, filename);
-      const fileContent = fs.readFileSync(filepath).toString().trim();
-
       const key = getKeyMapping({
         client,
         clientInfo,
@@ -92,9 +89,8 @@ function getBinding(type, client, bindingOptions) {
       const value = getValueMapping({
         client,
         clientInfo,
+        bindingsRoot,
         filename,
-        filepath,
-        fileContent,
         key
       });
 

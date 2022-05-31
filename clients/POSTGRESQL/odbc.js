@@ -9,10 +9,9 @@ module.exports = {
     port: 'port',
     'ca.crt': { key: 'sslrootcert', path: true },
     'tls.crt': { key: 'sslcert', path: true },
-    'tls.key': { key: 'sslkey', path: true }
+    'tls.key': { key: 'sslkey', path: true, copy: true }
   },
   transform: (binding) => {
-
     const pqopt = [
       '{',
       `sslrootcert=${binding.sslrootcert}`,
@@ -29,10 +28,8 @@ module.exports = {
       `Port=${binding.port}`,
       `Username=${binding.user}`,
       `Password=${binding.password}`,
-      'SSLmode=verify-ca'
+      'SSLmode=verify-full'
     ].join(';');
   },
-  filter: (binding) => {
-    return filterObject(binding, ['connectionString']);
-  }
+  filter: (binding) => filterObject(binding, ['connectionString'])
 };

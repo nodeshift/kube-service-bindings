@@ -1,6 +1,7 @@
 const assert = require('assert');
 const path = require('path');
 const { after, before, describe, it } = require('mocha');
+const fs = require('fs');
 const bindings = require('../../index.js');
 
 const { bindedFiles, connectionString } = require('./assertionObjects');
@@ -81,7 +82,7 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.key`;
+    const sslkey = `tls.key`;
 
     const pqopt = [
       `{`,
@@ -96,7 +97,7 @@ describe('test-postgresql-bindings', () => {
       sslrootcert,
       sslcert,
       sslkey,
-      connectionString: `pqopt=${pqopt};${connectionString}`
+      connectionString: `Pqopt=${pqopt};${connectionString}`
     };
     assert(binding);
     assert.deepEqual(binding, validationObject);
@@ -109,7 +110,7 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.key`;
+    const sslkey = `tls.key`;
 
     const pqopt = [
       `{`,
@@ -120,7 +121,7 @@ describe('test-postgresql-bindings', () => {
     ].join(' ');
 
     const validationObject = {
-      connectionString: `pqopt=${pqopt};${connectionString}`
+      connectionString: `Pqopt=${pqopt};${connectionString}`
     };
 
     assert(binding);
@@ -132,7 +133,7 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.key`;
+    const sslkey = `tls.key`;
 
     const pqopt = [
       `{`,
@@ -143,11 +144,18 @@ describe('test-postgresql-bindings', () => {
     ].join(' ');
 
     const validationObject = {
-      connectionString: `pqopt=${pqopt};${connectionString}`
+      connectionString: `Pqopt=${pqopt};${connectionString}`
     };
 
     assert(binding);
     assert.deepEqual(binding, validationObject);
+    after(function () {
+      fs.unlink(sslkey, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    });
   });
 
   after(() => {
