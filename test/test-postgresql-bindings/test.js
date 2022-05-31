@@ -6,6 +6,8 @@ const bindings = require('../../index.js');
 
 const { bindedFiles, connectionString } = require('./assertionObjects');
 
+const regex = /sslkey=[^}]*/i;
+
 describe('test-postgresql-bindings', () => {
   let env;
   before(() => {
@@ -82,7 +84,10 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = 'tls.key';
+    const sslkey = binding.connectionString
+      .match(regex)[0]
+      .split('=')[1]
+      .trim();
 
     const pqopt = [
       '{',
@@ -101,6 +106,13 @@ describe('test-postgresql-bindings', () => {
     };
     assert(binding);
     assert.deepEqual(binding, validationObject);
+    after(function () {
+      fs.unlink(sslkey, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    });
   });
 
   it('fetches credentials for odbc client in PSQL filtered by mappings', () => {
@@ -110,7 +122,10 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = 'tls.key';
+    const sslkey = binding.connectionString
+      .match(regex)[0]
+      .split('=')[1]
+      .trim();
 
     const pqopt = [
       '{',
@@ -126,6 +141,13 @@ describe('test-postgresql-bindings', () => {
 
     assert(binding);
     assert.deepEqual(binding, validationObject);
+    after(function () {
+      fs.unlink(sslkey, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    });
   });
 
   it('fetches credentials for odbc client in PSQL default behaviour', () => {
@@ -133,7 +155,10 @@ describe('test-postgresql-bindings', () => {
 
     const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
     const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = 'tls.key';
+    const sslkey = binding.connectionString
+      .match(regex)[0]
+      .split('=')[1]
+      .trim();
 
     const pqopt = [
       '{',

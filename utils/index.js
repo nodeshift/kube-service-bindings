@@ -94,7 +94,9 @@ function getValueMapping({ client, clientInfo, bindingsRoot, filename, key }) {
 
   if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
     if (clientInfo.mapping[filename].copy) {
-      const newFilepath = path.join('.', path.basename(filepath));
+      const prefix = 'tmp-';
+      const tempfolder = fs.mkdtempSync(prefix, { encoding: 'utf8' });
+      const newFilepath = path.join('.', tempfolder, path.basename(filepath));
       fs.copyFileSync(filepath, newFilepath);
       fs.chmodSync(newFilepath, 0o600);
       return newFilepath;
