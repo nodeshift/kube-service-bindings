@@ -107,7 +107,7 @@ describe('test-postgresql-bindings', () => {
     assert(binding);
     assert.deepEqual(binding, validationObject);
     after(function () {
-      fs.unlink(sslkey, (err) => {
+      fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
         if (err) {
           console.error(err);
         }
@@ -142,7 +142,7 @@ describe('test-postgresql-bindings', () => {
     assert(binding);
     assert.deepEqual(binding, validationObject);
     after(function () {
-      fs.unlink(sslkey, (err) => {
+      fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
         if (err) {
           console.error(err);
         }
@@ -175,7 +175,7 @@ describe('test-postgresql-bindings', () => {
     assert(binding);
     assert.deepEqual(binding, validationObject);
     after(function () {
-      fs.unlink(sslkey, (err) => {
+      fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
         if (err) {
           console.error(err);
         }
