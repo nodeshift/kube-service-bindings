@@ -9,22 +9,14 @@ module.exports = {
     password: 'password'
   },
   transform: (binding) => {
-    if (
-      binding.host &&
-      binding.database &&
-      binding.port &&
-      binding.user &&
-      binding.password
-    ) {
-      binding.connectionString = [
-        'DRIVER=MySQL',
-        `SERVER=${binding.host}`,
-        `DATABASE=${binding.database}`,
-        `PORT=${binding.port}`,
-        `USER=${binding.user}`,
-        `PASSWORD=${binding.password}`
-      ].join(';');
-    }
+    binding.connectionString = [
+      'DRIVER=MySQL',
+      `SERVER=${binding.host}`,
+      `DATABASE=${binding.database}`,
+      `PORT=${binding.port}`,
+      `USER=${binding.user}`,
+      `PASSWORD=${binding.password}`
+    ].join(';');
   },
   filter: (binding) => {
     return filterObject(binding, ['connectionString']);
