@@ -4,186 +4,255 @@ const { after, before, describe, it } = require('mocha');
 const fs = require('fs');
 const bindings = require('../../index.js');
 
-const { bindedFiles, connectionString } = require('./assertionObjects');
+const {
+  postgresDataBindingsMappedForPG,
+  crunchyDataBindingsMappedForPG,
+  crunchyDataBindingsMappedForOdbc,
+  getPqopt,
+  getSslcerts,
+  getOdbcConnectionString
+} = require('./mappedDataBindings');
 
 const regex = /sslkey=[^}]*/i;
 
-describe('test-postgresql-bindings', () => {
+describe('PSQL', () => {
   let env;
   before(() => {
     env = process.env;
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
   });
+  describe('PG client on posgtresql-bindings', () => {
+    const id = 'postgresql-bindings';
+    it('Default behavior: removes unnecessary properties.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', { id });
+      assert(binding);
+      assert.deepEqual(binding, postgresDataBindingsMappedForPG);
+    });
 
-  it('Testing pg client with id and removeUnmapped option', () => {
-    const binding = bindings.getBinding('POSTGRESQL', 'pg', {
-      id: 'postgresql-bindings',
-      removeUnmapped: true
+    it('Removes unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: true
+      });
+      assert(binding);
+      assert.deepEqual(binding, postgresDataBindingsMappedForPG);
     });
-    assert(binding);
-    assert.deepEqual(binding, {
-      database: 'db1',
-      host: '127.0.0.1',
-      password: 'p1',
-      port: '1234',
-      type: 'postgresql',
-      user: 'michael',
-      ssl: {
-        ca: '----BEGIN CERTIFICATE-----\n1234\n-----END CERTIFICATE-----',
-        cert: '-----BEGIN CERTIFICATE-----\nABCD\n-----END CERTIFICATE-----',
-        key: '-----BEGIN CERTIFICATE-----\nXYZ\n-----END CERTIFICATE-----'
-      }
-    });
-  });
 
-  it('Testing pg client with id and removeUnmapped option to false', () => {
-    const binding = bindings.getBinding('POSTGRESQL', 'pg', {
-      id: 'postgresql-bindings',
-      removeUnmapped: false
-    });
-    assert(binding);
-    assert.deepEqual(binding, {
-      database: 'db1',
-      host: '127.0.0.1',
-      password: 'p1',
-      port: '1234',
-      type: 'postgresql',
-      user: 'michael',
-      ssl: {
-        ca: '----BEGIN CERTIFICATE-----\n1234\n-----END CERTIFICATE-----',
-        cert: '-----BEGIN CERTIFICATE-----\nABCD\n-----END CERTIFICATE-----',
-        key: '-----BEGIN CERTIFICATE-----\nXYZ\n-----END CERTIFICATE-----'
-      }
+    it('Does not remove unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: false
+      });
+      assert(binding);
+      assert.deepEqual(binding, postgresDataBindingsMappedForPG);
     });
   });
-
-  it('Testing pg client with id and mapped option default behaviour', () => {
-    const binding = bindings.getBinding('POSTGRESQL', 'pg', {
-      id: 'postgresql-bindings'
+  describe('PG client on crunchy-data-postgres-operator', () => {
+    const id = 'crunchy-data-postgres-operator';
+    it('Default behavior: removes unnecessary properties.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: false
+      });
+      assert(binding);
+      assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
     });
-    assert(binding);
-    assert.deepEqual(binding, {
-      database: 'db1',
-      host: '127.0.0.1',
-      password: 'p1',
-      port: '1234',
-      type: 'postgresql',
-      user: 'michael',
-      ssl: {
-        ca: '----BEGIN CERTIFICATE-----\n1234\n-----END CERTIFICATE-----',
-        cert: '-----BEGIN CERTIFICATE-----\nABCD\n-----END CERTIFICATE-----',
-        key: '-----BEGIN CERTIFICATE-----\nXYZ\n-----END CERTIFICATE-----'
-      }
+
+    it('Removes unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: true
+      });
+      assert(binding);
+      assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
+    });
+
+    it('Does not remove unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: false
+      });
+      assert(binding);
+      assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
     });
   });
+  describe('ODBC client', () => {
+    const id = 'crunchy-data-postgres-operator';
 
-  it('fetches Unmapped credentials for odbc client in PSQL', () => {
-    const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
-      removeUnmapped: false
+    it('Default behavior: removes unnecessary properties. Does NOT copy tls.key in another directory with proper permissions.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id
+      });
+
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT
+      });
+
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
+
+      assert(binding);
+      assert.deepEqual(binding, odbcConnectionString);
     });
 
-    const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
-    const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = binding.connectionString
-      .match(regex)[0]
-      .split('=')[1]
-      .trim();
+    it('Removes unnecessary properties and copies tls.key file in another location with altered/proper permissions.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id,
+        removeUnmapped: true,
+        allowCopy: true
+      });
 
-    const pqopt = [
-      '{',
-      `sslrootcert=${sslrootcert}`,
-      `sslcert=${sslcert}`,
-      `sslkey=${sslkey}`,
-      '}'
-    ].join(' ');
+      const sslkey = binding.connectionString
+        .match(regex)[0]
+        .split('=')[1]
+        .trim();
 
-    const validationObject = {
-      ...bindedFiles,
-      sslrootcert,
-      sslcert,
-      sslkey,
-      connectionString: `Pqopt=${pqopt};${connectionString}`
-    };
-    assert(binding);
-    assert.deepEqual(binding, validationObject);
-    after(function () {
-      fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
-        if (err) {
-          console.error(err);
-        }
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT,
+        overrideSslkeyPath: sslkey
+      });
+
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
+
+      assert(binding);
+      assert.deepEqual(binding, odbcConnectionString);
+      after(function () {
+        return removeDirectory(sslkey);
       });
     });
-  });
 
-  it('fetches credentials for odbc client in PSQL filtered by mappings', () => {
-    const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
-      removeUnmapped: true
+    it('Removes unnecessary properties and does NOT copy tls.key file in another directory.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id,
+        removeUnmapped: true,
+        allowCopy: false
+      });
+
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT
+      });
+
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
+
+      assert(binding);
+      assert.deepEqual(binding, odbcConnectionString);
     });
 
-    const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
-    const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = binding.connectionString
-      .match(regex)[0]
-      .split('=')[1]
-      .trim();
+    it('Does NOT remove unnecessary properties and copies tls.key file in another directory with altered/proper permissions.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id,
+        removeUnmapped: false,
+        allowCopy: true
+      });
 
-    const pqopt = [
-      '{',
-      `sslrootcert=${sslrootcert}`,
-      `sslcert=${sslcert}`,
-      `sslkey=${sslkey}`,
-      '}'
-    ].join(' ');
+      const sslkey = binding.connectionString
+        .match(regex)[0]
+        .split('=')[1]
+        .trim();
 
-    const validationObject = {
-      connectionString: `Pqopt=${pqopt};${connectionString}`
-    };
+      const { sslrootcert, sslcert } = getSslcerts({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT
+      });
 
-    assert(binding);
-    assert.deepEqual(binding, validationObject);
-    after(function () {
-      fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
-        if (err) {
-          console.error(err);
-        }
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT,
+        overrideSslkeyPath: sslkey
+      });
+
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
+
+      const validationObject = {
+        ...crunchyDataBindingsMappedForOdbc,
+        sslrootcert,
+        sslcert,
+        sslkey,
+        ...odbcConnectionString
+      };
+      assert(binding);
+      assert.deepEqual(binding, validationObject);
+      after(function () {
+        return removeDirectory(sslkey);
       });
     });
-  });
 
-  it('fetches credentials for odbc client in PSQL default behaviour', () => {
-    const binding = bindings.getBinding('POSTGRESQL', 'odbc');
+    it('Does NOT remove unnecessary properties and does NOT copy tls.key file in another directory with altered/proper permissions.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id,
+        removeUnmapped: false,
+        allowCopy: false
+      });
 
-    const sslrootcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/ca.crt`;
-    const sslcert = `${process.env.SERVICE_BINDING_ROOT}/crunchy-data-postgres-operator/tls.crt`;
-    const sslkey = binding.connectionString
-      .match(regex)[0]
-      .split('=')[1]
-      .trim();
+      const { sslrootcert, sslcert, sslkey } = getSslcerts({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT
+      });
 
-    const pqopt = [
-      '{',
-      `sslrootcert=${sslrootcert}`,
-      `sslcert=${sslcert}`,
-      `sslkey=${sslkey}`,
-      '}'
-    ].join(' ');
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT
+      });
 
-    const validationObject = {
-      connectionString: `Pqopt=${pqopt};${connectionString}`
-    };
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
 
-    assert(binding);
-    assert.deepEqual(binding, validationObject);
-    after(function () {
-      fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
-        if (err) {
-          console.error(err);
-        }
+      const validationObject = {
+        ...crunchyDataBindingsMappedForOdbc,
+        sslrootcert,
+        sslcert,
+        sslkey,
+        ...odbcConnectionString
+      };
+
+      assert(binding);
+      assert.deepEqual(binding, validationObject);
+    });
+
+    it('Removes unnecessary properties and copies tls.key file in another directory with altered/proper permissions.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id,
+        allowCopy: true
+      });
+
+      const sslkey = binding.connectionString
+        .match(regex)[0]
+        .split('=')[1]
+        .trim();
+
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT,
+        overrideSslkeyPath: sslkey
+      });
+
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
+
+      assert(binding);
+      assert.deepEqual(binding, odbcConnectionString);
+      after(function () {
+        return removeDirectory(sslkey);
       });
     });
-  });
 
+    it('Removes unnecessary properties and does NOT copy tls.key file in another directory.', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
+        id,
+        allowCopy: false
+      });
+
+      const pqopt = getPqopt({
+        serviceBindingRoot: process.env.SERVICE_BINDING_ROOT
+      });
+
+      const odbcConnectionString = getOdbcConnectionString(pqopt);
+
+      assert(binding);
+      assert.deepEqual(binding, odbcConnectionString);
+    });
+  });
   after(() => {
     process.env = env;
   });
 });
+
+function removeDirectory(sslkey) {
+  fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
