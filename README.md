@@ -37,33 +37,51 @@ The parameters for `getBinding` include:
   of, it can map the service bindings into the form
   required by the client. Currently the following clients
   are recognized based on the supported types:
-  * KAFKA
-    * node-rdkafka
-    * kafkajs
-  * POSTGRESQL
-    * pg
-    * odbc
-  * REDIS
-    * redis
-    * ioredis
-  * MONGODB
-    * mongodb
-  * AMQP
-    * rhea
-  * MYSQL
-    * mysql
-    * mysql2
-    * odbc
+
+  - KAFKA
+    - node-rdkafka
+    - kafkajs
+  - POSTGRESQL
+    - pg
+    - odbc
+  - REDIS
+    - redis
+    - ioredis
+  - MONGODB
+    - mongodb
+  - AMQP
+    - rhea
+  - MYSQL
+    - mysql
+    - mysql2
+    - odbc
 
   If you don't specify a client, the object returned will
   be a direct map from the bindings, with the keys
   corresponding to the name of each file provided by the
   binding.
 
-- `id` - option id that is used to filter the available
-  bindings in the search. Most useful for testing where
-  you might have more than one binding of a given type
-  available.
+- `bindingOptions` - An object where provides control on parsing binding data.
+
+  The structure of the bindingOptions object is as follow:
+
+  ```
+  {
+    id: undefined,
+    removeUnmapped: true,
+    allowCopy: false
+  }
+  ```
+
+  - `id` : `[ Default=undefined ]`
+    - Option id that is used to filter the available
+      bindings in the search. Most useful for testing where
+      you might have more than one binding of a given type
+      available.
+  - `removeUnmapped` : `[ Default=true ]`
+    - Fine grains parsed binding data to fit for the specified client, removing unnecessary properties from the input object.
+  - `allowCopy`: `[ Default=false ]`
+    - Enables setting proper permissions for some of the binding data, where the system has not provided them correctly. Succeeds that by copy/pasting the file under a new directory, with the proper permissions. This has to be enabled by the user in order to be aware of the security risk, as some files might include sensitive material. E.x. connecting to postgresql with odbc client, throws the following error for the tls.key file `permissions should be u=rw (0600) or less`.
 
 This is an example of how kube-service-bindings might
 be used:
