@@ -91,7 +91,8 @@ function getBinding(type, client, bindingOptions) {
         clientInfo,
         bindingsRoot,
         filename,
-        key
+        key,
+        bindOptions
       });
 
       setKey(binding, key, value);

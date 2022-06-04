@@ -83,7 +83,14 @@ function getKeyMapping({ client, clientInfo, filename }) {
   return filename;
 }
 
-function getValueMapping({ client, clientInfo, bindingsRoot, filename, key }) {
+function getValueMapping({
+  client,
+  clientInfo,
+  bindingsRoot,
+  filename,
+  key,
+  bindOptions
+}) {
   const filepath = path.join(bindingsRoot, filename);
 
   const fileContent = fs.readFileSync(filepath).toString().trim();
@@ -93,7 +100,7 @@ function getValueMapping({ client, clientInfo, bindingsRoot, filename, key }) {
   }
 
   if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
-    if (clientInfo.mapping[filename].copy) {
+    if (clientInfo.mapping[filename].copy && bindOptions.allowCopy === true) {
       const prefix = 'tmp-';
       const tempfolder = fs.mkdtempSync(prefix, { encoding: 'utf8' });
       const newFilepath = path.join('.', tempfolder, path.basename(filepath));
