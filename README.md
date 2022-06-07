@@ -49,6 +49,7 @@ The parameters for `getBinding` include:
     - ioredis
   - MONGODB
     - mongodb
+    - mongoose
   - AMQP
     - rhea
   - MYSQL

@@ -29,6 +29,25 @@ describe('MongoDB', () => {
     });
   });
 
+  describe('mongoose Client', () => {
+    it('Default behavior', () => {
+      const binding = bindings.getBinding('MONGODB', 'mongoose');
+      assert(binding);
+      assert.deepEqual(binding, {
+        connectionOptions: {
+          auth: {
+            password: 'p1',
+            username: 'michael'
+          }
+        },
+        host: 'test.ourdomain.com',
+        port: '1234',
+        srv: 'true',
+        url: 'mongodb+srv://michael:p1@test.ourdomain.com'
+      });
+    });
+  });
+
   after(() => {
     process.env = env;
   });
