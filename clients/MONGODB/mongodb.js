@@ -17,11 +17,13 @@ module.exports = {
       ? encodeURIComponent(binding.connectionOptions.auth.password)
       : '';
 
+    const srv = binding.srv === 'true';
+
     binding.url = [
       'mongodb',
-      binding.srv === 'true' ? '+srv' : '',
+      srv ? '+srv' : '',
       `://${encodedUser}:${encodedPassword}@${binding.host}`,
-      binding.srv !== 'true' && binding.port ? `:${binding.port}` : ''
+      !srv && binding.port ? `:${binding.port}` : ''
     ].join('');
   }
 };
