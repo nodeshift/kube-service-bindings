@@ -76,7 +76,7 @@ describe('PSQL', () => {
       assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
     });
   });
-  describe('ODBC client', () => {
+  describe('ODBC client on crunchy-data-postgres-operator', () => {
     const id = 'crunchy-data-postgres-operator';
 
     it('Default behavior: removes unnecessary properties. Does NOT copy tls.key in another directory with proper permissions.', () => {

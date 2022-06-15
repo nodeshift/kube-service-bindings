@@ -108,6 +108,13 @@ function getValueMapping({
       fs.chmodSync(newFilepath, 0o600);
       return newFilepath;
     }
+
+    showFilePermissionsWarningMessage(
+      clientInfo.mapping[filename].copy,
+      bindOptions.allowCopy,
+      filename
+    );
+
     return filepath;
   }
 
@@ -117,6 +124,17 @@ function getValueMapping({
   }
 
   return fileContent;
+}
+
+function showFilePermissionsWarningMessage(itCanBeCopied, allowCopy, filename) {
+  if (itCanBeCopied && allowCopy === false) {
+    const warnMessage = [
+      `Warning: File ${filename} does not have proper permissions.`,
+      'Set allowCopy option to true, for copy/pasting file with proper permissions under app directory.',
+      '**By enabling this options, this might be a potential security risk**'
+    ].join('\n');
+    console.log(warnMessage);
+  }
 }
 
 module.exports = {
