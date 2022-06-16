@@ -1,4 +1,3 @@
-// Binding for mongodb client
 module.exports = {
   mapping: {
     username: { connectionOptions: { auth: 'username' } },
