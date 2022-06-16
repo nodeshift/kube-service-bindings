@@ -1,28 +1,34 @@
 const { defaultOptions } = require('../options/defaultOptions');
+const fs = require('fs');
+const path = require('path');
 
-const isString = function (x) {
-  return !!(typeof x === 'string' || x instanceof String);
+const getType = function (x) {
+  return Object.prototype.toString.call(x).slice(8, -1);
 };
 
-const isObject = function (x) {
-  return typeof x === 'object' && !Array.isArray(x) && x !== null;
-};
+function getBindOptions(options) {
+  const type = getType(options);
 
-const isArray = function (x) {
-  return Array.isArray(x);
-};
-
-const getBindOptions = function (options) {
-  if (isString(options)) {
+  const isString = function () {
     return Object.assign({}, defaultOptions, {
       id: options
     });
-  } else if (isObject(options)) {
+  };
+
+  const isObject = function () {
     return Object.assign({}, defaultOptions, options);
-  } else {
-    return defaultOptions;
-  }
-};
+  };
+
+  const resolveOptions = {
+    String: isString,
+    Object: isObject,
+    default: function () {
+      return defaultOptions;
+    }
+  };
+
+  return (resolveOptions[type] || resolveOptions.default)();
+}
 
 const filterObject = function (object, keys) {
   return Object.keys(object)
@@ -38,31 +44,103 @@ const filterObject = function (object, keys) {
 // passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
 const setKey = function (binding, key, value) {
-  if (!key) return;
+  const type = getType(key);
 
-  if (isString(key)) {
+  const isString = function () {
+    if (!key) return;
     binding[key] = value;
-    return;
-  }
-  if (isArray(key)) {
+  };
+
+  const isArray = function () {
     binding[key[0]] = new Array(value);
-    return;
-  }
-  if (isObject(key)) {
+  };
+
+  const isObject = function () {
     for (const subkey in key) {
       if (!binding[subkey]) {
         binding[subkey] = {};
       }
       setKey(binding[subkey], key[subkey], value);
     }
-  }
+  };
+
+  const bindings = {
+    String: isString,
+    Array: isArray,
+    Object: isObject,
+    default: function () {}
+  };
+  return (bindings[type] || bindings.default)();
 };
 
+function getKeyMapping({ client, clientInfo, filename }) {
+  if (!client) {
+    return filename;
+  }
+  if (clientInfo.mapping[filename] || clientInfo.mapping[filename] === '') {
+    return clientInfo.mapping[filename].key || clientInfo.mapping[filename];
+  }
+  return filename;
+}
+
+function getValueMapping({
+  client,
+  clientInfo,
+  bindingsRoot,
+  filename,
+  key,
+  bindOptions
+}) {
+  const filepath = path.join(bindingsRoot, filename);
+
+  const fileContent = fs.readFileSync(filepath).toString().trim();
+
+  if (!client) {
+    return fileContent;
+  }
+
+  if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
+    if (clientInfo.mapping[filename].copy && bindOptions.allowCopy === true) {
+      const prefix = 'tmp-';
+      const tempfolder = fs.mkdtempSync(prefix, { encoding: 'utf8' });
+      const newFilepath = path.join('.', tempfolder, path.basename(filepath));
+      fs.copyFileSync(filepath, newFilepath);
+      fs.chmodSync(newFilepath, 0o600);
+      return newFilepath;
+    }
+
+    showFilePermissionsWarningMessage(
+      clientInfo.mapping[filename].copy,
+      bindOptions.allowCopy,
+      filename
+    );
+
+    return filepath;
+  }
+
+  // get the value and map if needed
+  if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
+    return clientInfo.valueMapping[key][fileContent];
+  }
+
+  return fileContent;
+}
+
+function showFilePermissionsWarningMessage(itCanBeCopied, allowCopy, filename) {
+  if (itCanBeCopied && allowCopy === false) {
+    const warnMessage = [
+      `Warning: File ${filename} does not have proper permissions.`,
+      'Set allowCopy option to true, for copy/pasting file with proper permissions under app directory.',
+      '**By enabling this options, this might be a potential security risk**'
+    ].join('\n');
+    console.log(warnMessage);
+  }
+}
+
 module.exports = {
-  isString,
-  isObject,
-  isArray,
   getBindOptions,
   filterObject,
-  setKey
+  setKey,
+  getKeyMapping,
+  getValueMapping
 };

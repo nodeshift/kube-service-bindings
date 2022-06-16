@@ -83,3 +83,16 @@ describe('basic tests 2', () => {
     process.env = env;
   });
 });
+
+describe('No service binding variable provided on process environment.', () => {
+  it('should throw an error about not finding SERVICE_BINDING_ROOT env variable', () => {
+    try {
+      bindings.getBinding('KAFKA');
+    } catch (err) {
+      assert.equal(
+        err.toString(),
+        'Error: No SERVICE_BINDING_ROOT env variable Found'
+      );
+    }
+  });
+});

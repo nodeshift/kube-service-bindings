@@ -38,20 +38,20 @@ describe('On MySQL Database', () => {
     assert.deepEqual(binding, connectionCredentials);
   });
 
-  it('fetches Unmapped credentials for mysql client', () => {
-    const binding = bindings.getBinding('MYSQL', 'mysql', {
-      removeUnmapped: false
-    });
-    assert(binding);
-    assert.deepEqual(binding, bindedFiles);
-  });
-
-  it('fetches credentials for mysql client filtered by mappings', () => {
+  it('fetches credentials for mysql client, filtered by mappings', () => {
     const binding = bindings.getBinding('MYSQL', 'mysql', {
       removeUnmapped: true
     });
     assert(binding);
     assert.deepEqual(binding, connectionCredentials);
+  });
+
+  it('fetches credentials for mysql client, NOT filtered by mappings', () => {
+    const binding = bindings.getBinding('MYSQL', 'mysql', {
+      removeUnmapped: false
+    });
+    assert(binding);
+    assert.deepEqual(binding, { ...bindedFiles, ...connectionCredentials });
   });
 
   it('fetches credentials for mysql client, default behavior', () => {

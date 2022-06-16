@@ -5,7 +5,9 @@
   "license": "Apache-2.0",
   "typings": "index.d.ts",
   "scripts": {
-    "pretest": "eslint --ignore-path .gitignore .",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "npm run lint -- --fix",
+    "pretest": "npm run lint",
     "test": "nyc mocha --recursive",
     "coverage": "nyc npm test && nyc report --reporter=html",
     "prerelease": "npm run test",
@@ -40,17 +42,14 @@
   },
   "support": true,
   "devDependencies": {
-    "eslint": "^8.14.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-semistandard": "^16.0.0",
+    "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.0",
-    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "mocha": "^9.2.2",
     "nyc": "^15.1.0",
     "prettier": "^2.6.2",
-    "standard-version": "^9.3.0"
+    "standard-version": "^9.5.0"
   }
 }

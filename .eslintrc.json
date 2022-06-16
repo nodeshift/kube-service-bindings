@@ -1,10 +1,20 @@
 {
-  "extends": ["semistandard", "prettier"],
+  "extends": ["standard"],
   "rules": {
     "prefer-const": "error",
     "block-scoped-var": "error",
     "prefer-template": "warn",
     "no-unneeded-ternary": "warn",
-    "no-use-before-define": ["error", "nofunc"]
+    "no-use-before-define": ["error", "nofunc"],
+    "semi": ["error", "always"],
+    "comma-dangle": ["error", "never"],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ]
   }
 }

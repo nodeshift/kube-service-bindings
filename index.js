@@ -1,7 +1,12 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { getBindOptions, setKey } = require('./utils/index.js');
+const {
+  getBindOptions,
+  setKey,
+  getKeyMapping,
+  getValueMapping
+} = require('./utils/index.js');
 
 const typeMapping = {
   KAFKA: 'kafka',
@@ -73,36 +78,32 @@ function getBinding(type, client, bindingOptions) {
   const binding = {};
   const bindingFiles = fs.readdirSync(bindingsRoot);
   bindingFiles
-    .filter((file) => !file.startsWith('..'))
-    .forEach((file) => {
-      let key = file;
-      let value = fs
-        .readFileSync(path.join(bindingsRoot, file))
-        .toString()
-        .trim();
+    .filter((filename) => !filename.startsWith('..'))
+    .forEach((filename) => {
+      const key = getKeyMapping({
+        client,
+        clientInfo,
+        filename
+      });
 
-      if (client) {
-        if (clientInfo.mapping[key] || clientInfo.mapping[key] === '') {
-          key = clientInfo.mapping[key];
-        }
+      const value = getValueMapping({
+        client,
+        clientInfo,
+        bindingsRoot,
+        filename,
+        key,
+        bindOptions
+      });
 
-        // get the value and map if needed
-        if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
-          value = clientInfo.valueMapping[key][value];
-        }
-
-        // set the key
-        setKey(binding, key, value);
-
-        // do any final transforms needed
-        if (clientInfo.transform) {
-          clientInfo.transform(binding);
-        }
-      } else {
-        setKey(binding, key, value);
-      }
+      setKey(binding, key, value);
     });
 
+  // do any final transforms needed
+  if (client && clientInfo.transform) {
+    clientInfo.transform(binding);
+  }
+
+  // do any final filter needed
   if (client && clientInfo.filter && bindOptions.removeUnmapped) {
     return clientInfo.filter(binding);
   }
