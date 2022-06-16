@@ -1,3 +1,5 @@
+const { filterObject } = require('../../utils');
+
 // Binding for mongodb client
 module.exports = {
   mapping: {
@@ -25,5 +27,6 @@ module.exports = {
       `://${encodedUser}:${encodedPassword}@${binding.host}`,
       !srv && binding.port ? `:${binding.port}` : ''
     ].join('');
-  }
+  },
+  filter: (binding) => filterObject(binding, ['url', 'connectionOptions'])
 };
