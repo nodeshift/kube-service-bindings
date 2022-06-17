@@ -1,7 +1,5 @@
 # kube-service-bindings
 
-![CI](https://github.com/nodeshift/kube-service-bindings/workflows/Node.js%20CI/badge.svg)
-
 Service bindings is [kubernetes](https://kubernetes.io/) spec on
 how to communicate service secrets to applications in an automated way.
 The spec is available [here](https://github.com/k8s-service-bindings/spec).
@@ -9,6 +7,19 @@ The spec is available [here](https://github.com/k8s-service-bindings/spec).
 The goal of this package is to make it easy for Node.js
 applications to consume these secrets, without requiring developers
 to be familiar with service bindings.
+
+![CI](https://github.com/nodeshift/kube-service-bindings/workflows/Node.js%20CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/nodeshift/kube-service-bindings/badge.svg?branch=main)](https://coveralls.io/github/nodeshift/kube-service-bindings?branch=main)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![NPM version](https://img.shields.io/npm/v/kube-service-bindings.svg)](https://www.npmjs.com/package/kube-service-bindings)
+
+# Install
+
+```
+npm install kube-service-bindings --save
+```
+
+# Usage
 
 The package provides the `getBinding` method which does roughly
 the following:
@@ -49,6 +60,7 @@ The parameters for `getBinding` include:
     - ioredis
   - MONGODB
     - mongodb
+    - mongoose
   - AMQP
     - rhea
   - MYSQL
