@@ -8,21 +8,46 @@ module.exports = {
     type: ''
   },
   transform: (binding) => {
-    const encodedUser = encodeURIComponent(
-      binding.connectionOptions.auth.username
-    );
+    const encodedUsername = getEncodedUsername(binding);
 
-    const encodedPassword = binding.connectionOptions.auth.password
-      ? encodeURIComponent(binding.connectionOptions.auth.password)
-      : '';
+    const encodedPassword = getEncodedPassword(binding);
+
+    const usernameAndPassword =
+      encodedUsername && encodedPassword
+        ? `${encodedUsername}:${encodedPassword}@`
+        : '';
 
     const srv = binding.srv === 'true';
 
     binding.url = [
       'mongodb',
       srv ? '+srv' : '',
-      `://${encodedUser}:${encodedPassword}@${binding.host}`,
+      '://',
+      usernameAndPassword,
+      `${binding.host}`,
       !srv && binding.port ? `:${binding.port}` : ''
     ].join('');
   }
 };
+
+function getEncodedUsername(binding) {
+  if (
+    binding.connectionOptions &&
+    binding.connectionOptions.auth &&
+    binding.connectionOptions.auth.username
+  ) {
+    return encodeURIComponent(binding.connectionOptions.auth.username);
+  }
+  return '';
+}
+
+function getEncodedPassword(binding) {
+  if (
+    binding.connectionOptions &&
+    binding.connectionOptions.auth &&
+    binding.connectionOptions.auth.password
+  ) {
+    return encodeURIComponent(binding.connectionOptions.auth.password);
+  }
+  return '';
+}

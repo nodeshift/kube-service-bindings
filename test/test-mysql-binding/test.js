@@ -9,7 +9,7 @@ const {
   connectionString
 } = require('./assertions');
 
-describe('On MySQL Database', () => {
+describe('MySQL', () => {
   let env;
   before(() => {
     env = process.env;
