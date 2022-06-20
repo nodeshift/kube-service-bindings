@@ -4,8 +4,9 @@ const path = require('path');
 const {
   getBindOptions,
   setKey,
-  getKeyMapping,
-  getValueMapping
+  mapKey,
+  getBindValue,
+  mapValue
 } = require('./utils/index.js');
 
 const typeMapping = {
@@ -25,7 +26,7 @@ const aliases = {
 function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(bindingOptions);
 
-  const id = bindOptions.id;
+  const { id } = bindOptions;
 
   // validate we know about the type
   if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
@@ -79,24 +80,18 @@ function getBinding(type, client, bindingOptions) {
   const bindingFiles = fs.readdirSync(bindingsRoot);
   bindingFiles
     .filter((filename) => !filename.startsWith('..'))
-    .forEach((filename) => {
-      const key = getKeyMapping({
-        client,
-        clientInfo,
-        filename
-      });
-
-      const value = getValueMapping({
-        client,
-        clientInfo,
-        bindingsRoot,
-        filename,
-        key,
-        bindOptions
-      });
-
-      setKey(binding, key, value);
-    });
+    .map((filename) => path.join(bindingsRoot, filename))
+    .map((filepath) => [
+      mapKey(clientInfo, filepath),
+      getBindValue(clientInfo, filepath, bindOptions)
+    ])
+    .map(([mappedKey, value]) => [
+      mappedKey,
+      mapValue(clientInfo, mappedKey, value)
+    ])
+    .forEach(([mappedKey, mappedValue]) =>
+      setKey(binding, mappedKey, mappedValue)
+    );
 
   // do any final transforms needed
   if (client && clientInfo.transform) {

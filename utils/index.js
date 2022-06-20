@@ -73,33 +73,26 @@ const setKey = function (binding, key, value) {
   return (bindings[type] || bindings.default)();
 };
 
-function getKeyMapping({ client, clientInfo, filename }) {
-  if (!client) {
-    return filename;
-  }
-  if (clientInfo.mapping[filename] || clientInfo.mapping[filename] === '') {
+function mapKey(clientInfo, filepath) {
+  const filename = path.basename(filepath);
+
+  if (
+    clientInfo &&
+    (clientInfo.mapping[filename] || clientInfo.mapping[filename] === '')
+  ) {
     return clientInfo.mapping[filename].key || clientInfo.mapping[filename];
   }
   return filename;
 }
 
-function getValueMapping({
-  client,
-  clientInfo,
-  bindingsRoot,
-  filename,
-  key,
-  bindOptions
-}) {
-  const filepath = path.join(bindingsRoot, filename);
+function getBindValue(clientInfo, filepath, bindOptions) {
+  const filename = path.basename(filepath);
 
-  const fileContent = fs.readFileSync(filepath).toString().trim();
-
-  if (!client) {
-    return fileContent;
-  }
-
-  if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
+  if (
+    clientInfo &&
+    clientInfo.mapping[filename] &&
+    clientInfo.mapping[filename].path
+  ) {
     if (clientInfo.mapping[filename].copy && bindOptions.allowCopy === true) {
       const prefix = 'tmp-';
       const tempfolder = fs.mkdtempSync(prefix, { encoding: 'utf8' });
@@ -117,13 +110,14 @@ function getValueMapping({
 
     return filepath;
   }
+  return fs.readFileSync(filepath).toString().trim();
+}
 
-  // get the value and map if needed
-  if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
-    return clientInfo.valueMapping[key][fileContent];
+function mapValue(clientInfo, key, value) {
+  if (clientInfo && clientInfo.valueMapping && clientInfo.valueMapping[key]) {
+    return clientInfo.valueMapping[key][value];
   }
-
-  return fileContent;
+  return value;
 }
 
 function showFilePermissionsWarningMessage(itCanBeCopied, allowCopy, filename) {
@@ -171,7 +165,7 @@ module.exports = {
   getBindOptions,
   filterObject,
   setKey,
-  getKeyMapping,
-  getValueMapping,
-  buildOptionParam
+  mapKey,
+  getBindValue,
+  mapValue
 };
