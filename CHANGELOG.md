@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.10...v1.0.0) (2022-06-20)
+
 ### [0.0.10](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.9...v0.0.10) (2022-06-20)
 
 
