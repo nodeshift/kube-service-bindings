@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.9...v0.0.10) (2022-06-20)
+
+
+### Features
+
+* add support for odbc client with mysql ([c460993](https://github.com/nodeshift/kube-service-bindings/commit/c460993d2784802b4ba1451af06f6d1e359d1721))
+* add support for using odbc ([1935b5f](https://github.com/nodeshift/kube-service-bindings/commit/1935b5f94d1309e90fa5dae184977f486f1b9567))
+* adding mysql client support with tests and all ([#39](https://github.com/nodeshift/kube-service-bindings/issues/39)) ([1087630](https://github.com/nodeshift/kube-service-bindings/commit/10876302ff7d587e57b2cf471441f95944fbd6ad))
+* upgrade eslint from 7.32.0 to 8.8.0 ([#33](https://github.com/nodeshift/kube-service-bindings/issues/33)) ([9a6081c](https://github.com/nodeshift/kube-service-bindings/commit/9a6081c0c6a9c657b01e85743a3de25dc65c290a))
+
+
+### Bug Fixes
+
+* add mysql to list of clients for mysql db ([751d9bc](https://github.com/nodeshift/kube-service-bindings/commit/751d9bce3c2fb867550c692f4e979203783d7a2d))
+* commiting package-lock.json file ([#30](https://github.com/nodeshift/kube-service-bindings/issues/30)) ([37b2d4f](https://github.com/nodeshift/kube-service-bindings/commit/37b2d4f0f6f0d4e6e2968fad2ca528e2277fb0fe))
+* upgrade mocha from 9.2.1 to 9.2.2 ([#32](https://github.com/nodeshift/kube-service-bindings/issues/32)) ([e11f3ca](https://github.com/nodeshift/kube-service-bindings/commit/e11f3ca1802337b4b5aa7b9404ec971415175429))
+
 ### [0.0.9](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.8...v0.0.9) (2022-03-08)
 
 ### 0.0.8 (2022-02-21)
