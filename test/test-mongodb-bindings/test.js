@@ -10,7 +10,7 @@ describe('MongoDB', () => {
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
   });
 
-  describe('mongodb Client on mongodb-bindings', () => {
+  describe('mongodb on mongodb-bindings', () => {
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
         id: 'mongodb-bindings'
@@ -31,8 +31,23 @@ describe('MongoDB', () => {
     });
   });
 
-  describe('mongodb Client on mongodb-bindings-with-port', () => {
-    it('Default behaviour id: mongodb-bindings-with-port', () => {
+  describe('mongodb on mongodb-bindings', () => {
+    it('Default behaviour', () => {
+      const binding = bindings.getBinding('MONGODB', 'mongodb', {
+        id: 'mongodb-bindings-without-username-password'
+      });
+      assert(binding);
+      assert.deepEqual(binding, {
+        host: 'test.ourdomain.com',
+        port: '1234',
+        srv: 'true',
+        url: 'mongodb+srv://test.ourdomain.com'
+      });
+    });
+  });
+
+  describe('mongodb on mongodb-bindings-with-port', () => {
+    it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
         id: 'mongodb-bindings-with-port'
       });
@@ -51,7 +66,7 @@ describe('MongoDB', () => {
     });
   });
 
-  describe('mongoose Client on mongodb-bindings ', () => {
+  describe('mongoose on mongodb-bindings ', () => {
     it('Default behavior', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
         id: 'mongodb-bindings'
@@ -106,7 +121,7 @@ describe('MongoDB', () => {
     });
   });
 
-  describe('mongoose Client on mongodb-bindings-with-port', () => {
+  describe('mongoose on mongodb-bindings-with-port', () => {
     it('Default Behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
         id: 'mongodb-bindings-with-port'
@@ -140,7 +155,7 @@ describe('MongoDB', () => {
       });
     });
 
-    it('Remove unmapped values', () => {
+    it('Do NOT Remove unmapped values', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
         id: 'mongodb-bindings-with-port',
         removeUnmapped: false
