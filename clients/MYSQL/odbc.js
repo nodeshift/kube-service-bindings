@@ -1,13 +1,7 @@
 const { filterObject } = require('../../utils/index.js');
-
+const { mapping } = require('./mysql.js');
 module.exports = {
-  mapping: {
-    host: 'host',
-    database: 'database',
-    port: 'port',
-    username: 'user',
-    password: 'password'
-  },
+  mapping,
   transform: (binding) => {
     binding.connectionString = [
       'DRIVER=MySQL',
