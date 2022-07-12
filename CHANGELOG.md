@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://www.github.com/nodeshift/kube-service-bindings/compare/v1.0.0...v1.0.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* upgrade eslint from 8.17.0 to 8.18.0 ([#53](https://www.github.com/nodeshift/kube-service-bindings/issues/53)) ([24d7fa6](https://www.github.com/nodeshift/kube-service-bindings/commit/24d7fa6d53f836ebf06b1ae5511c62c7771c9e71))
+* upgrade eslint-plugin-n from 15.2.1 to 15.2.2 ([#49](https://www.github.com/nodeshift/kube-service-bindings/issues/49)) ([d215ef3](https://www.github.com/nodeshift/kube-service-bindings/commit/d215ef374cfe1e068d161bf9a8316fa6cfb4bcb1))
+* upgrade eslint-plugin-n from 15.2.2 to 15.2.3 ([#52](https://www.github.com/nodeshift/kube-service-bindings/issues/52)) ([5221c32](https://www.github.com/nodeshift/kube-service-bindings/commit/5221c32dfaba9f6a7d6fcbc93dbc7dc2fb12d25c))
+
 ## [1.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.10...v1.0.0) (2022-06-20)
 
 ### [0.0.10](https://github.com/nodeshift/kube-service-bindings/compare/v0.0.9...v0.0.10) (2022-06-20)
