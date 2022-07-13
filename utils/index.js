@@ -164,6 +164,21 @@ function buildOptionParam(bindOpt) {
 const isKnownServiceType = (type) =>
   fs.existsSync(path.join(__dirname, '..', 'clients', type));
 
+function getClientInfo(type, client) {
+  try {
+    return require(path.join(__dirname, '..', 'clients', type, client));
+  } catch (e) {
+    return null;
+  }
+}
+
+const isDefined = function (x) {
+  if (typeof x === 'undefined' || x === null) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   getBindOptions,
   filterObject,
@@ -171,5 +186,7 @@ module.exports = {
   mapKey,
   getBindValue,
   mapValue,
-  isKnownServiceType
+  isKnownServiceType,
+  getClientInfo,
+  isDefined
 };

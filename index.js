@@ -7,7 +7,9 @@ const {
   mapKey,
   getBindValue,
   mapValue,
-  isKnownServiceType
+  isKnownServiceType,
+  getClientInfo,
+  isDefined
 } = require('./utils/index.js');
 
 const typeMapping = {
@@ -31,12 +33,10 @@ function getBinding(type, client, bindingOptions) {
     throw new Error('Unknown service type');
   }
 
-  // validate that we know about the requested client
   let clientInfo;
-  if (client) {
-    try {
-      clientInfo = require(path.join(__dirname, 'clients', type, client));
-    } catch (e) {
+  if (isDefined(client)) {
+    clientInfo = getClientInfo(type, client);
+    if (clientInfo === null) {
       throw new Error('Unknown client');
     }
   }
