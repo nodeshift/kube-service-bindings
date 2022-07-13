@@ -6,7 +6,8 @@ const {
   setKey,
   mapKey,
   getBindValue,
-  mapValue
+  mapValue,
+  isKnownServiceType
 } = require('./utils/index.js');
 
 const typeMapping = {
@@ -26,10 +27,7 @@ const aliases = {
 function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(bindingOptions);
 
-  const { id } = bindOptions;
-
-  // validate we know about the type
-  if (!fs.existsSync(path.join(__dirname, 'clients', type))) {
+  if (!isKnownServiceType(type)) {
     throw new Error('Unknown service type');
   }
 
@@ -62,7 +60,7 @@ function getBinding(type, client, bindingOptions) {
         bindingType === typeMapping[type] ||
         aliases[typeMapping[type]].includes(bindingType)
       ) {
-        if (id === undefined || file.includes(id)) {
+        if (bindOptions.id === undefined || file.includes(bindOptions.id)) {
           bindingsRoot = path.join(root, file);
           break;
         }

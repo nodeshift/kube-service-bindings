@@ -161,11 +161,15 @@ function buildOptionParam(bindOpt) {
   return optList.join(' ');
 }
 
+const isKnownServiceType = (type) =>
+  fs.existsSync(path.join(__dirname, '..', 'clients', type));
+
 module.exports = {
   getBindOptions,
   filterObject,
   setKey,
   mapKey,
   getBindValue,
-  mapValue
+  mapValue,
+  isKnownServiceType
 };
