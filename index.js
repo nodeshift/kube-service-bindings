@@ -41,13 +41,13 @@ function getBinding(type, client, bindingOptions) {
     }
   }
 
-  // find the matching binding
-  let bindingsRoot = null;
   const root = process.env.SERVICE_BINDING_ROOT;
-
   if (!root) {
     throw new Error('No SERVICE_BINDING_ROOT env variable Found');
   }
+
+  // find the matching binding
+  let bindingsRoot = null;
 
   const candidates = fs.readdirSync(root);
   for (const file of candidates) {
@@ -69,7 +69,7 @@ function getBinding(type, client, bindingOptions) {
   }
 
   // bail if we did not find a binding
-  if (bindingsRoot == null) {
+  if (bindingsRoot === null) {
     throw new Error('No Binding Found');
   }
 
