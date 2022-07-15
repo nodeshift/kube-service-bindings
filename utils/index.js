@@ -2,6 +2,19 @@ const { defaultOptions } = require('../options/defaultOptions');
 const fs = require('fs');
 const path = require('path');
 
+const typeMapping = {
+  KAFKA: 'kafka',
+  POSTGRESQL: 'postgresql',
+  REDIS: 'redis',
+  MONGODB: 'mongodb',
+  AMQP: 'amqp',
+  MYSQL: 'mysql'
+};
+
+const aliases = {
+  amqp: ['rabbitmq']
+};
+
 const getType = function (x) {
   return Object.prototype.toString.call(x).slice(8, -1);
 };
@@ -179,6 +192,26 @@ const isDefined = function (x) {
   return true;
 };
 
+function getBindingDataPath(root, type, id) {
+  try {
+    const candidates = fs.readdirSync(root);
+    for (const file of candidates) {
+      const bindingType = fs
+        .readFileSync(path.join(root, file, 'type'))
+        .toString()
+        .trim();
+      if (
+        bindingType === typeMapping[type] ||
+        aliases[typeMapping[type]].includes(bindingType)
+      ) {
+        if (id === undefined || file.includes(id)) {
+          return path.join(root, file);
+        }
+      }
+    }
+  } catch (err) {}
+}
+
 module.exports = {
   getBindOptions,
   filterObject,
@@ -188,5 +221,6 @@ module.exports = {
   mapValue,
   isKnownServiceType,
   getClientInfo,
-  isDefined
+  isDefined,
+  getBindingDataPath
 };

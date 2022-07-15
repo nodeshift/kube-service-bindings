@@ -97,11 +97,12 @@ The parameters for `getBinding` include:
   - `removeUnmapped` : `[ Default=true ]`
     - Fine grains parsed binding data to fit for the specified client, removing unnecessary properties from the input object.
   - `allowCopy`: `[ Default=false ]`
- - Enables setting proper permissions for some of the binding data, where the system has not
-   provided them correctly. It allows binding files content to be copied/stored in a new file
-   and directory. This has to be enabled by the user in order to be aware of the security risk,
-   as some files might include sensitive material. E.x. connecting to postgresql with odbc
-   client, throws the following error for the tls.key file `permissions should be u=rw (0600) or less`.
+
+- Enables setting proper permissions for some of the binding data, where the system has not
+  provided them correctly. It allows binding files content to be copied/stored in a new file
+  and directory. This has to be enabled by the user in order to be aware of the security risk,
+  as some files might include sensitive material. E.x. connecting to postgresql with odbc
+  client, throws the following error for the tls.key file `permissions should be u=rw (0600) or less`.
 
 This is an example of how kube-service-bindings might
 be used:

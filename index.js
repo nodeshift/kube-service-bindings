@@ -9,23 +9,11 @@ const {
   mapValue,
   isKnownServiceType,
   getClientInfo,
-  isDefined
+  isDefined,
+  getBindingDataPath
 } = require('./utils/index.js');
 
-const typeMapping = {
-  KAFKA: 'kafka',
-  POSTGRESQL: 'postgresql',
-  REDIS: 'redis',
-  MONGODB: 'mongodb',
-  AMQP: 'amqp',
-  MYSQL: 'mysql'
-};
 
-const aliases = {
-  amqp: ['rabbitmq']
-};
-
-// return the bindings requested
 function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(bindingOptions);
 
@@ -46,30 +34,8 @@ function getBinding(type, client, bindingOptions) {
     throw new Error('No SERVICE_BINDING_ROOT env variable Found');
   }
 
-  // find the matching binding
-  let bindingsRoot = null;
-
-  const candidates = fs.readdirSync(root);
-  for (const file of candidates) {
-    try {
-      const bindingType = fs
-        .readFileSync(path.join(root, file, 'type'))
-        .toString()
-        .trim();
-      if (
-        bindingType === typeMapping[type] ||
-        aliases[typeMapping[type]].includes(bindingType)
-      ) {
-        if (bindOptions.id === undefined || file.includes(bindOptions.id)) {
-          bindingsRoot = path.join(root, file);
-          break;
-        }
-      }
-    } catch (err) {}
-  }
-
-  // bail if we did not find a binding
-  if (bindingsRoot === null) {
+  const bindingDataPath = getBindingDataPath(root, type, bindOptions.id);
+  if (!isDefined(bindingDataPath)) {
     throw new Error('No Binding Found');
   }
 
