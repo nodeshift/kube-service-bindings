@@ -20,27 +20,21 @@ const getType = function (x) {
 };
 
 function getBindOptions(options) {
-  const type = getType(options);
-
-  const isString = function () {
-    return Object.assign({}, defaultOptions, {
-      id: options
-    });
-  };
-
-  const isObject = function () {
-    return Object.assign({}, defaultOptions, options);
-  };
-
   const resolveOptions = {
-    String: isString,
-    Object: isObject,
+    String: () => {
+      return Object.assign({}, defaultOptions, {
+        id: options
+      });
+    },
+    Object: () => {
+      return Object.assign({}, defaultOptions, options);
+    },
     default: function () {
       return defaultOptions;
     }
   };
 
-  return (resolveOptions[type] || resolveOptions.default)();
+  return (resolveOptions[getType(options)] || resolveOptions.default)();
 }
 
 const filterObject = function (object, keys) {
@@ -57,33 +51,25 @@ const filterObject = function (object, keys) {
 // passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
 const setKey = function (binding, key, value) {
-  const type = getType(key);
-
-  const isString = function () {
-    if (!key) return;
-    binding[key] = value;
-  };
-
-  const isArray = function () {
-    binding[key[0]] = new Array(value);
-  };
-
-  const isObject = function () {
-    for (const subkey in key) {
-      if (!binding[subkey]) {
-        binding[subkey] = {};
-      }
-      setKey(binding[subkey], key[subkey], value);
-    }
-  };
-
   const bindings = {
-    String: isString,
-    Array: isArray,
-    Object: isObject,
-    default: function () {}
+    String: () => {
+      if (!key) return;
+      binding[key] = value;
+    },
+    Array: () => {
+      binding[key[0]] = new Array(value);
+    },
+    Object: () => {
+      for (const subkey in key) {
+        if (!binding[subkey]) {
+          binding[subkey] = {};
+        }
+        setKey(binding[subkey], key[subkey], value);
+      }
+    },
+    default: () => {}
   };
-  return (bindings[type] || bindings.default)();
+  return (bindings[getType(key)] || bindings.default)();
 };
 
 function mapKey(clientInfo, key) {
