@@ -39,20 +39,19 @@ function getBinding(type, client, bindingOptions) {
     throw new Error('No Binding Found');
   }
 
-  // read and convert the available binding info
   const binding = {};
-  const bindingFiles = fs.readdirSync(bindingsRoot);
-  bindingFiles
+  fs.readdirSync(bindingDataPath)
     .filter((filename) => !filename.startsWith('..'))
-    .map((filename) => path.join(bindingsRoot, filename))
-    .map((filepath) => [
-      mapKey(clientInfo, filepath),
-      getBindValue(clientInfo, filepath, bindOptions)
+    .map((filename) => [
+      filename,
+      getBindValue(
+        clientInfo,
+        path.join(bindingDataPath, filename),
+        bindOptions
+      )
     ])
-    .map(([mappedKey, value]) => [
-      mappedKey,
-      mapValue(clientInfo, mappedKey, value)
-    ])
+    .map(([key, value]) => [mapKey(clientInfo, key), value])
+    .map(([key, value]) => [key, mapValue(clientInfo, key, value)])
     .forEach(([mappedKey, mappedValue]) =>
       setKey(binding, mappedKey, mappedValue)
     );

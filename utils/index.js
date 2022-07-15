@@ -86,16 +86,14 @@ const setKey = function (binding, key, value) {
   return (bindings[type] || bindings.default)();
 };
 
-function mapKey(clientInfo, filepath) {
-  const filename = path.basename(filepath);
-
+function mapKey(clientInfo, key) {
   if (
     clientInfo &&
-    (clientInfo.mapping[filename] || clientInfo.mapping[filename] === '')
+    (clientInfo.mapping[key] || clientInfo.mapping[key] === '')
   ) {
-    return clientInfo.mapping[filename].key || clientInfo.mapping[filename];
+    return clientInfo.mapping[key].key || clientInfo.mapping[key];
   }
-  return filename;
+  return key;
 }
 
 function getBindValue(clientInfo, filepath, bindOptions) {
