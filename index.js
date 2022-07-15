@@ -30,26 +30,35 @@ function getBinding(type, client, bindingOptions) {
   }
 
   const root = process.env.SERVICE_BINDING_ROOT;
-  if (!root) {
-    throw new Error('No SERVICE_BINDING_ROOT env variable Found');
-  }
+  let bindingData;
+  if (!isDefined(bindingOptions?.bindingData)) {
+    if (!root) {
+      throw new Error('No SERVICE_BINDING_ROOT env variable Found');
+    }
+    const bindingDataPath = getBindingDataPath(root, type, bindOptions.id);
+    if (!isDefined(bindingDataPath)) {
+      throw new Error('No Binding Found');
+    }
 
-  const bindingDataPath = getBindingDataPath(root, type, bindOptions.id);
-  if (!isDefined(bindingDataPath)) {
-    throw new Error('No Binding Found');
+    bindingData = fs
+      .readdirSync(bindingDataPath)
+      .filter((filename) => !filename.startsWith('..'))
+      .map((filename) => [
+        filename,
+        getBindValue(
+          clientInfo,
+          path.join(bindingDataPath, filename),
+          bindOptions
+        )
+      ]);
+    // console.log(Object.fromEntries(bindingData));
+  } else {
+    bindingData = Object.entries(bindOptions.bindingData);
   }
 
   const binding = {};
-  fs.readdirSync(bindingDataPath)
-    .filter((filename) => !filename.startsWith('..'))
-    .map((filename) => [
-      filename,
-      getBindValue(
-        clientInfo,
-        path.join(bindingDataPath, filename),
-        bindOptions
-      )
-    ])
+
+  bindingData
     .map(([key, value]) => [mapKey(clientInfo, key), value])
     .map(([key, value]) => [key, mapValue(clientInfo, key, value)])
     .forEach(([mappedKey, mappedValue]) =>
