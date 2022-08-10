@@ -63,6 +63,33 @@ const crunchyDataBindingsMappedForPG = (function () {
   };
 })();
 
+const postgresqlDBRHODA = {
+  ssl: {
+    ca: '----BEGIN CERTIFICATE-----\nKLMN\n-----END CERTIFICATE-----'
+  },
+  database: 'db1',
+  host: '127.0.0.1',
+  password: 'p1',
+  port: '1234',
+  options: '--cluster=fruit-service-test -c opt1=val1',
+  sslmode: 'verify-full',
+  sslrootcert: 'root.crt',
+  type: 'postgresql',
+  user: 'fruit-user',
+  provider: 'CockroachDB Cloud'
+};
+
+const postgresqlDBRHODAOPT = {
+  database: 'db1',
+  host: '127.0.0.1',
+  password: 'p1',
+  port: '1234',
+  options: '--cluster=fruit-service-test -c opt2=val2',
+  type: 'postgresql',
+  user: 'fruit-user',
+  provider: 'CockroachDB Cloud'
+};
+
 const crunchyDataBindingsMappedForOdbc = (function () {
   const { 'ca.crt': caCrt, ...rest } = crunchyDB;
   return {
@@ -70,6 +97,14 @@ const crunchyDataBindingsMappedForOdbc = (function () {
     username: 'hippo'
   };
 })();
+
+const postgresDataBindingsMappedForPGRHODA = {
+  ...postgresqlDBRHODA
+};
+
+const postgresDataBindingsMappedForPGRHODAOPT = {
+  ...postgresqlDBRHODAOPT
+};
 
 function getPqopt({ serviceBindingRoot, overrideSslkeyPath }) {
   let sslkeyPath = `${serviceBindingRoot}/crunchy-data-postgres-operator/tls.key`;
@@ -114,6 +149,8 @@ module.exports = {
   crunchyDB,
   crunchyDataBindingsMappedForPG,
   crunchyDataBindingsMappedForOdbc,
+  postgresDataBindingsMappedForPGRHODA,
+  postgresDataBindingsMappedForPGRHODAOPT,
   getPqopt,
   getSslcerts,
   getOdbcConnectionString
