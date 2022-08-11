@@ -38,7 +38,7 @@ function getBinding(type, client, bindingOptions) {
   }
 
   let bindingData;
-  if (isDefined(bindingOptions.bindingData)) {
+  if (isDefined(bindOptions.bindingData)) {
     bindingData = Object.entries(bindOptions.bindingData);
   } else {
     if (!root) {

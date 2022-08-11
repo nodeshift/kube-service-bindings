@@ -7,7 +7,6 @@ const bindingData = {
   host: 'test.ourdomain.com',
   password: 'p1',
   port: 1234,
-  type: 'mongodb',
   username: 'michael'
 };
 
@@ -74,7 +73,7 @@ describe('MongoDB', () => {
     });
   });
 
-  describe.only('mongodb on passing binding data as arguments', () => {
+  describe('mongodb on passing binding data as arguments', () => {
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
         bindingData
