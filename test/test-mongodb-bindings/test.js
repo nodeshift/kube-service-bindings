@@ -3,6 +3,14 @@ const path = require('path');
 const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
+const bindingData = {
+  host: 'test.ourdomain.com',
+  password: 'p1',
+  port: 1234,
+  type: 'mongodb',
+  username: 'michael'
+};
+
 describe('MongoDB', () => {
   let env;
   before(() => {
@@ -31,7 +39,7 @@ describe('MongoDB', () => {
     });
   });
 
-  describe('mongodb on mongodb-bindings', () => {
+  describe('mongodb on mongodb-bindings-without-username-password', () => {
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
         id: 'mongodb-bindings-without-username-password'
@@ -50,6 +58,26 @@ describe('MongoDB', () => {
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
         id: 'mongodb-bindings-with-port'
+      });
+      assert(binding);
+      assert.deepEqual(binding, {
+        connectionOptions: {
+          auth: {
+            password: 'p1',
+            username: 'michael'
+          }
+        },
+        host: 'test.ourdomain.com',
+        port: '1234',
+        url: 'mongodb://michael:p1@test.ourdomain.com:1234'
+      });
+    });
+  });
+
+  describe.only('mongodb on passing binding data as arguments', () => {
+    it('Default behaviour', () => {
+      const binding = bindings.getBinding('MONGODB', 'mongodb', {
+        bindingData
       });
       assert(binding);
       assert.deepEqual(binding, {

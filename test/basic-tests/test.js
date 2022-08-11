@@ -10,6 +10,35 @@ describe('basic tests', () => {
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
   });
 
+  it('Should return raw bindings data.', () => {
+    const binding = bindings.getBinding();
+    assert(binding);
+    assert.deepEqual(binding, [
+      {
+        bootstrapServers: 'test-boostrap:443',
+        clientId: 'client1',
+        clientSecret: 'pass1',
+        password: 'pass1',
+        provider: 'rhoas',
+        saslMechanism: 'PLAIN',
+        securityProtocol: 'SASL_SSL',
+        type: 'kafka',
+        user: 'user1'
+      },
+      {
+        bootstrapServers: 'another-test-boostrap:443',
+        clientId: 'another-client1',
+        clientSecret: 'another-pass1',
+        password: 'another-pass1',
+        provider: 'another-rhoas',
+        saslMechanism: 'another-PLAIN',
+        securityProtocol: 'another-SASL_SSL',
+        type: 'another-kafka',
+        user: 'another-user1'
+      }
+    ]);
+  });
+
   it('unknown service', () => {
     try {
       bindings.getBinding('DOEST_NOT_EXIST');

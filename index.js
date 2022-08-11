@@ -10,11 +10,21 @@ const {
   isKnownServiceType,
   getClientInfo,
   isDefined,
-  getBindingDataPath
+  getBindingDataPath,
+  getRawBindingData
 } = require('./utils/index.js');
 
 function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(type, client, bindingOptions);
+
+  const root = process.env.SERVICE_BINDING_ROOT;
+
+  if (!isDefined(type)) {
+    if (!root) {
+      throw new Error('No SERVICE_BINDING_ROOT env variable Found');
+    }
+    return getRawBindingData(root);
+  }
 
   // validate we know about the type
   if (isDefined(type) && !isKnownServiceType(type)) {
@@ -27,9 +37,10 @@ function getBinding(type, client, bindingOptions) {
     throw new Error('Unknown client');
   }
 
-  const root = process.env.SERVICE_BINDING_ROOT;
   let bindingData;
-  if (!isDefined(bindingOptions?.bindingData)) {
+  if (isDefined(bindingOptions.bindingData)) {
+    bindingData = Object.entries(bindOptions.bindingData);
+  } else {
     if (!root) {
       throw new Error('No SERVICE_BINDING_ROOT env variable Found');
     }
@@ -49,10 +60,9 @@ function getBinding(type, client, bindingOptions) {
           bindOptions
         )
       ]);
-  } else {
-    bindingData = Object.entries(bindOptions.bindingData);
   }
 
+  // read and convert the available binding info
   const binding = {};
 
   bindingData

@@ -229,6 +229,28 @@ function getBindingDataPath(root, type, id) {
   } catch (err) {}
 }
 
+function getRawBindingData(root) {
+  const bindingDataDirs = fs
+    .readdirSync(root)
+    .map((bindingDataDir) => {
+      const filenames = fs.readdirSync(path.join(root, bindingDataDir));
+      return { bindingDataDir, filenames };
+    })
+    .map(({ bindingDataDir, filenames }) => {
+      const bindingData = {};
+      filenames.forEach((filename) => {
+        const value = fs
+          .readFileSync(path.join(root, bindingDataDir, filename))
+          .toString()
+          .trim();
+        bindingData[filename] = value;
+      });
+      return bindingData;
+    });
+
+  return bindingDataDirs;
+}
+
 module.exports = {
   getBindOptions,
   filterObject,
@@ -239,5 +261,7 @@ module.exports = {
   isKnownServiceType,
   getClientInfo,
   isDefined,
-  getBindingDataPath
+  getBindingDataPath,
+  getRawBindingData,
+  buildOptionParam
 };
