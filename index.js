@@ -13,20 +13,18 @@ const {
   getBindingDataPath
 } = require('./utils/index.js');
 
-
 function getBinding(type, client, bindingOptions) {
-  const bindOptions = getBindOptions(bindingOptions);
+  const bindOptions = getBindOptions(type, client, bindingOptions);
 
-  if (!isKnownServiceType(type)) {
+  // validate we know about the type
+  if (isDefined(type) && !isKnownServiceType(type)) {
     throw new Error('Unknown service type');
   }
 
-  let clientInfo;
-  if (isDefined(client)) {
-    clientInfo = getClientInfo(type, client);
-    if (clientInfo === null) {
-      throw new Error('Unknown client');
-    }
+  // validate we know about the client
+  const clientInfo = getClientInfo(type, client);
+  if (isDefined(client) && !clientInfo) {
+    throw new Error('Unknown client');
   }
 
   const root = process.env.SERVICE_BINDING_ROOT;
@@ -51,7 +49,6 @@ function getBinding(type, client, bindingOptions) {
           bindOptions
         )
       ]);
-    // console.log(Object.fromEntries(bindingData));
   } else {
     bindingData = Object.entries(bindOptions.bindingData);
   }

@@ -1,6 +1,10 @@
 const { defaultOptions } = require('../options/defaultOptions');
 const fs = require('fs');
 const path = require('path');
+const {
+  warnings: { NO_CLIENT_SPECIFIED_DEPRECATION, PASSING_ONLY_ID_DEPRECATION },
+  errors: { INVALID_ARGUMENTS }
+} = require('./messages/index.js');
 
 const typeMapping = {
   KAFKA: 'kafka',
@@ -19,22 +23,54 @@ const getType = function (x) {
   return Object.prototype.toString.call(x).slice(8, -1);
 };
 
-function getBindOptions(options) {
-  const resolveOptions = {
-    String: () => {
-      return Object.assign({}, defaultOptions, {
-        id: options
-      });
-    },
-    Object: () => {
-      return Object.assign({}, defaultOptions, options);
-    },
-    default: function () {
-      return defaultOptions;
-    }
-  };
+function getBindOptions(type, client, bindingOptions) {
+  // case 1
+  if (!isDefined(type) && !isDefined(client) && !isDefined(bindingOptions)) {
+    return { id: undefined };
+  }
 
-  return (resolveOptions[getType(options)] || resolveOptions.default)();
+  // case 2 - deprecated
+  if (!isDefined(client) && !isDefined(bindingOptions)) {
+    console.log(NO_CLIENT_SPECIFIED_DEPRECATION);
+    return defaultOptions;
+  }
+
+  // case 3 - not supported
+
+  // case 4 - deprecated
+  if (getType(client) === 'Object' && !isDefined(bindingOptions)) {
+    console.log(NO_CLIENT_SPECIFIED_DEPRECATION);
+    return Object.assign({}, defaultOptions, bindingOptions);
+  }
+
+  // case 5
+  if (getType(client) === 'String' && !isDefined(bindingOptions)) {
+    return defaultOptions;
+  }
+
+  // case 6 - deprecated
+  if (
+    getType(client) === 'String' &&
+    isDefined(bindingOptions) &&
+    getType(bindingOptions) === 'String'
+  ) {
+    console.log(PASSING_ONLY_ID_DEPRECATION);
+
+    return Object.assign({}, defaultOptions, {
+      id: bindingOptions
+    });
+  }
+
+  // case 7
+  if (
+    getType(client) === 'String' &&
+    isDefined(bindingOptions) &&
+    getType(bindingOptions) === 'Object'
+  ) {
+    return Object.assign({}, defaultOptions, bindingOptions);
+  }
+
+  throw new Error(INVALID_ARGUMENTS);
 }
 
 const filterObject = function (object, keys) {
@@ -165,16 +201,13 @@ function getClientInfo(type, client) {
   try {
     return require(path.join(__dirname, '..', 'clients', type, client));
   } catch (e) {
-    return null;
+    return undefined;
   }
 }
 
-const isDefined = function (x) {
-  if (typeof x === 'undefined' || x === null) {
-    return false;
-  }
-  return true;
-};
+function isDefined(x) {
+  return !(typeof x === 'undefined' || x === null);
+}
 
 function getBindingDataPath(root, type, id) {
   try {

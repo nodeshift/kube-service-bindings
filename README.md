@@ -104,6 +104,15 @@ The parameters for `getBinding` include:
   as some files might include sensitive material. E.x. connecting to postgresql with odbc
   client, throws the following error for the tls.key file `permissions should be u=rw (0600) or less`.
 
+| case | Arg1 | Arg2        | Arg3        | Supported | deprecate |
+| ---- | ---- | ----------- | ----------- | --------- | --------- |
+| 1    | -    | -           | -           | true      | -         |
+| 2    | type | -           | -           | true      | true      |
+| 3    | type | id          | -           | false     |           |
+| 4    | type | bindOptions | -           | true      | true      |
+| 5    | type | client      | -           | true      | -         |
+| 6    | type | client      | id          | true      | true      |
+| 7    | type | client      | bindOptions | true      | -         |
 This is an example of how kube-service-bindings might
 be used:
 
