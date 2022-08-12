@@ -214,7 +214,7 @@ try {
   | 1    | -    | -           | -           | true      | -         |
   | 2    | type | -           | -           | true      | true      |
   | 3    | type | id          | -           | false     |           |
-  | 4    | type | bindOptions | -           | true      | true      |
+  | 4    | type | bindOptions | -           | false     |           |
   | 5    | type | client      | -           | true      | -         |
   | 6    | type | client      | id          | true      | true      |
   | 7    | type | client      | bindOptions | true      | -         | -->

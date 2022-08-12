@@ -37,11 +37,7 @@ function getBindOptions(type, client, bindingOptions) {
 
   // case 3 - not supported
 
-  // case 4 - deprecated
-  if (getType(client) === 'Object' && !isDefined(bindingOptions)) {
-    console.log(NO_CLIENT_SPECIFIED_DEPRECATION);
-    return Object.assign({}, defaultOptions, bindingOptions);
-  }
+  // case 4 - We were not supporting it in the past, we dont support it now
 
   // case 5
   if (getType(client) === 'String' && !isDefined(bindingOptions)) {

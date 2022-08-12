@@ -4,7 +4,7 @@ const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
 const {
-  errors: { NO_SERVICE_BINDING_ROOT }
+  errors: { NO_SERVICE_BINDING_ROOT, INVALID_ARGUMENTS }
 } = require('../../utils/messages/index.js');
 
 describe('basic tests', () => {
@@ -49,6 +49,17 @@ describe('basic tests', () => {
       assert.fail();
     } catch (err) {
       assert.equal(err.toString(), 'Error: Unknown service type');
+    }
+  });
+
+  const ERROR_INVALID_ARGUMENTS = `Error: ${INVALID_ARGUMENTS}`;
+
+  it(`should throw error: ${ERROR_INVALID_ARGUMENTS}`, () => {
+    try {
+      bindings.getBinding('KAFKA', { removeUnmapped: true });
+      assert.fail();
+    } catch (err) {
+      assert.equal(err.toString(), ERROR_INVALID_ARGUMENTS);
     }
   });
 
