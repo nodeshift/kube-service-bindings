@@ -1,6 +1,7 @@
 module.exports = {
   errors: {
-    INVALID_ARGUMENTS: 'Invalid Arguments'
+    INVALID_ARGUMENTS: 'Invalid Arguments',
+    NO_SERVICE_BINDING_ROOT: 'No SERVICE_BINDING_ROOT env variable Found'
   },
   warnings: {
     NO_CLIENT_SPECIFIED_DEPRECATION:

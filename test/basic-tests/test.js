@@ -3,6 +3,10 @@ const path = require('path');
 const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
+const {
+  errors: { NO_SERVICE_BINDING_ROOT }
+} = require('../../utils/messages/index.js');
+
 describe('basic tests', () => {
   let env;
   before(() => {
@@ -114,14 +118,21 @@ describe('basic tests 2', () => {
 });
 
 describe('No service binding variable provided on process environment.', () => {
-  it('should throw an error about not finding SERVICE_BINDING_ROOT env variable', () => {
+  const ERROR_NO_SERVICE_BINDING_ROOT = `Error: ${NO_SERVICE_BINDING_ROOT}`;
+  it(`should throw error: ${NO_SERVICE_BINDING_ROOT}`, () => {
     try {
       bindings.getBinding('KAFKA');
     } catch (err) {
-      assert.equal(
-        err.toString(),
-        'Error: No SERVICE_BINDING_ROOT env variable Found'
-      );
+      assert.equal(err.toString(), ERROR_NO_SERVICE_BINDING_ROOT);
+    }
+  });
+
+  it(`Should throw error: ${NO_SERVICE_BINDING_ROOT}`, () => {
+    try {
+      bindings.getBinding();
+      assert.fail();
+    } catch (err) {
+      assert.equal(err.toString(), ERROR_NO_SERVICE_BINDING_ROOT);
     }
   });
 });

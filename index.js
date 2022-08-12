@@ -14,6 +14,10 @@ const {
   getRawBindingData
 } = require('./utils/index.js');
 
+const {
+  errors: { NO_SERVICE_BINDING_ROOT }
+} = require('./utils/messages/index.js');
+
 function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(type, client, bindingOptions);
 
@@ -21,7 +25,7 @@ function getBinding(type, client, bindingOptions) {
 
   if (!isDefined(type)) {
     if (!root) {
-      throw new Error('No SERVICE_BINDING_ROOT env variable Found');
+      throw new Error(NO_SERVICE_BINDING_ROOT);
     }
     return getRawBindingData(root);
   }
