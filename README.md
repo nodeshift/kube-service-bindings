@@ -160,6 +160,8 @@ An object for passing binding data to kube-service-bindings. This is useful espe
 Example 1 mongodb client:
 
 ```javascript
+const serviceBindings = require('kube-service-bindings');
+
 let url;
 let connectionOptions;
 
@@ -185,6 +187,8 @@ try {
 Example 2 kafkajs client:
 
 ```javascript
+const serviceBindings = require('kube-service-bindings');
+
 let kafkaConnectionBindings;
 
 try {
@@ -214,3 +218,75 @@ try {
   | 5    | type | client      | -           | true      | -         |
   | 6    | type | client      | id          | true      | true      |
   | 7    | type | client      | bindOptions | true      | -         | -->
+
+## getBinding()
+
+By not passing any argument to getBinding function, will return binding data in raw format.
+
+#### Example of fetching binding data in raw format
+
+```bash
+$ tree $SERVICE_BINDING_ROOT
+
+/bindings
+├── kafka-bindings
+│   ├── bootstrapServers
+│   ├── clientId
+│   ├── clientSecret
+│   ├── password
+│   ├── provider
+│   ├── saslMechanism
+│   ├── securityProtocol
+│   ├── type
+│   └── user
+└── kafka-bindings-another
+    ├── bootstrapServers
+    ├── clientId
+    ├── clientSecret
+    ├── password
+    ├── provider
+    ├── saslMechanism
+    ├── securityProtocol
+    ├── type
+    └── user
+
+```
+
+By executing getBinding in the above environment.
+
+```javascript
+const serviceBindings = require('kube-service-bindings');
+
+const rawBindingData = getBinding();
+
+console.log(rawBindingData);
+```
+
+Will result in below output:
+
+```json
+[
+  {
+    "bootstrapServers": "test-boostrap:443",
+    "clientId": "client1",
+    "clientSecret": "pass1",
+    "password": "pass1",
+    "provider": "rhoas",
+    "saslMechanism": "PLAIN",
+    "securityProtocol": "SASL_SSL",
+    "type": "kafka",
+    "user": "user1"
+  },
+  {
+    "bootstrapServers": "another-test-boostrap:443",
+    "clientId": "another-client1",
+    "clientSecret": "another-pass1",
+    "password": "another-pass1",
+    "provider": "another-rhoas",
+    "saslMechanism": "another-PLAIN",
+    "securityProtocol": "another-SASL_SSL",
+    "type": "another-kafka",
+    "user": "another-user1"
+  }
+]
+```
