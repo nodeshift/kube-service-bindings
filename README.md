@@ -19,6 +19,10 @@ to be familiar with service bindings.
 npm install kube-service-bindings --save
 ```
 
+# Supported Node.js Versions
+
+**kube-service-bindings** supports and is tested only on the current, maintenance and active [Node.js LTS versions](https://github.com/nodejs/Release#release-schedule). We will bump the major version in a release of kube-service-bindings soon after an LTS version of Node.js goes EOL.
+
 # Usage
 
 The package provides the `getBinding` method which does roughly
