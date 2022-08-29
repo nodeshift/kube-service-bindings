@@ -51,8 +51,7 @@ describe('PSQL', () => {
     const id = 'crunchy-data-postgres-operator';
     it('Default behavior: removes unnecessary properties.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
-        id,
-        removeUnmapped: false
+        id
       });
       assert(binding);
       assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
