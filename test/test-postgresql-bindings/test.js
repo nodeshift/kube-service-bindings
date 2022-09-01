@@ -9,7 +9,8 @@ const {
   crunchyDataBindingsMappedForOdbc,
   getPqopt,
   getSslcerts,
-  getOdbcConnectionString
+  getOdbcConnectionString,
+  postgresDataBindingsMappedForPGRHODA
 } = require('./mappedDataBindings');
 
 const regex = /sslkey=[^}]*/i;
@@ -19,6 +20,32 @@ describe('PSQL', () => {
   before(() => {
     env = process.env;
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
+  });
+  describe('PG client on postgresql-rhoda', () => {
+    const id = 'postgresql-rhoda';
+    it('Default behavior: removes unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id
+      });
+      assert(binding);
+      assert.deepEqual(binding, postgresDataBindingsMappedForPGRHODA);
+    });
+    it('Removes unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: true
+      });
+      assert(binding);
+      assert.deepEqual(binding, postgresDataBindingsMappedForPGRHODA);
+    });
+    it('Does not remove unnecessary properties', () => {
+      const binding = bindings.getBinding('POSTGRESQL', 'pg', {
+        id,
+        removeUnmapped: false
+      });
+      assert(binding);
+      assert.deepEqual(binding, postgresDataBindingsMappedForPGRHODA);
+    });
   });
   describe('PG client on crunchy-data-postgres-operator', () => {
     const id = 'crunchy-data-postgres-operator';
