@@ -114,7 +114,7 @@ function mapKey(clientInfo, key) {
   return key;
 }
 
-function getBindValue(clientInfo, filepath, bindOptions) {
+function getBindValue(filepath, clientInfo, bindOptions) {
   const filename = path.basename(filepath);
 
   if (
@@ -247,6 +247,20 @@ function getRawBindingData(root) {
   return bindingDataDirs;
 }
 
+function getBindingData(bindingDataPath, clientInfo, bindOptions) {
+  return fs
+    .readdirSync(bindingDataPath)
+    .filter((filename) => !filename.startsWith('..'))
+    .map((filename) => [
+      filename,
+      getBindValue(
+        path.join(bindingDataPath, filename),
+        clientInfo,
+        bindOptions
+      )
+    ]);
+}
+
 module.exports = {
   getBindOptions,
   filterObject,
@@ -259,5 +273,6 @@ module.exports = {
   isDefined,
   getBindingDataPath,
   getRawBindingData,
-  buildOptionParam
+  buildOptionParam,
+  getBindingData
 };

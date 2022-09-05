@@ -1,11 +1,9 @@
 'use strict';
-const fs = require('fs');
-const path = require('path');
 const {
   getBindOptions,
   setKey,
   mapKey,
-  getBindValue,
+  getBindingData,
   mapValue,
   isKnownServiceType,
   getClientInfo,
@@ -15,7 +13,12 @@ const {
 } = require('./utils/index.js');
 
 const {
-  errors: { NO_SERVICE_BINDING_ROOT }
+  errors: {
+    NO_SERVICE_BINDING_ROOT,
+    UNKNOWN_SERVICE_TYPE,
+    UNKNOWN_CLIENT,
+    NO_BINDING_FOUND
+  }
 } = require('./utils/messages/index.js');
 
 function getBinding(type, client, bindingOptions) {
@@ -32,13 +35,13 @@ function getBinding(type, client, bindingOptions) {
 
   // validate we know about the type
   if (isDefined(type) && !isKnownServiceType(type)) {
-    throw new Error('Unknown service type');
+    throw new Error(UNKNOWN_SERVICE_TYPE);
   }
 
   // validate we know about the client
   const clientInfo = getClientInfo(type, client);
   if (isDefined(client) && !clientInfo) {
-    throw new Error('Unknown client');
+    throw new Error(UNKNOWN_CLIENT);
   }
 
   let bindingData;
@@ -46,24 +49,14 @@ function getBinding(type, client, bindingOptions) {
     bindingData = Object.entries(bindOptions.bindingData);
   } else {
     if (!root) {
-      throw new Error('No SERVICE_BINDING_ROOT env variable Found');
+      throw new Error(NO_SERVICE_BINDING_ROOT);
     }
     const bindingDataPath = getBindingDataPath(root, type, bindOptions.id);
     if (!isDefined(bindingDataPath)) {
-      throw new Error('No Binding Found');
+      throw new Error(NO_BINDING_FOUND);
     }
 
-    bindingData = fs
-      .readdirSync(bindingDataPath)
-      .filter((filename) => !filename.startsWith('..'))
-      .map((filename) => [
-        filename,
-        getBindValue(
-          clientInfo,
-          path.join(bindingDataPath, filename),
-          bindOptions
-        )
-      ]);
+    bindingData = getBindingData(bindingDataPath, clientInfo, bindOptions);
   }
 
   // read and convert the available binding info
