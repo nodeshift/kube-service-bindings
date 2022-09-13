@@ -25,16 +25,16 @@ function getBinding(type, client, bindingOptions) {
   const bindOptions = getBindOptions(type, client, bindingOptions);
 
   const root = process.env.SERVICE_BINDING_ROOT;
+  if (!root && !isDefined(bindOptions.bindingData)) {
+    throw new Error(NO_SERVICE_BINDING_ROOT);
+  }
 
   if (!isDefined(type)) {
-    if (!root) {
-      throw new Error(NO_SERVICE_BINDING_ROOT);
-    }
     return getRawBindingData(root);
   }
 
   // validate we know about the type
-  if (isDefined(type) && !isKnownServiceType(type)) {
+  if (!isKnownServiceType(type)) {
     throw new Error(UNKNOWN_SERVICE_TYPE);
   }
 
@@ -48,14 +48,10 @@ function getBinding(type, client, bindingOptions) {
   if (isDefined(bindOptions.bindingData)) {
     bindingData = Object.entries(bindOptions.bindingData);
   } else {
-    if (!root) {
-      throw new Error(NO_SERVICE_BINDING_ROOT);
-    }
     const bindingDataPath = getBindingDataPath(root, type, bindOptions.id);
     if (!isDefined(bindingDataPath)) {
       throw new Error(NO_BINDING_FOUND);
     }
-
     bindingData = getBindingData(bindingDataPath, clientInfo, bindOptions);
   }
 
