@@ -132,30 +132,30 @@ const mongoClient = new MongoClient(url, connectionOptions);
 
 ### bindingOptions
 
-An object where provides control on parsing binding data.
+An object which provides additional control over how binding data is parsed.
 
 | Attribute                         | type      | default Value |
 | --------------------------------- | --------- | ------------- |
 | [id](#id)                         | `String`  | undefined     |
-| [removeUnmapped](#removeunmapped) | `Boolean` | true          |
-| [allwCopy](#allowcopy)            | `Boolean` | false         |
+| [removeUnmapped](#removeunmapped) | `Boolean` | as set by client, or true if not set by client |
+| [allowCopy](#allowcopy)           | `Boolean` | false         |
 | [bindingData](#bindingdata)       | `Object`  | undefined     |
 
 #### id
 
-Option id that is used to filter the available bindings in the search. Most useful for testing where you might have more than one binding of a given type available.
+Id used to filter the available bindings.  For example, if you have two Kafka services bound to your application an id can be specified to identify which one should be used.  If there are multiple bindings that satisfy a request and no id is specified, the first one found will be used.
 
 #### removeUnmapped
 
-Fine grains parsed binding data to fit for the specified client, removing unnecessary properties from the input object.
+Removes all binding data which is not mapped for the client. If false any binding data which is not mapped remains in it's raw form on the binding object returned.  The default depends on the client.
 
 #### allowCopy
 
-Enables setting proper permissions for some of the binding data, where the system has not provided them correctly. It allows binding files content to be copied/stored in a new file and directory. This has to be enabled by the user in order to be aware of the security risk, as some files might include sensitive material. E.x. connecting to postgresql with odbc client, throws the following error for the tls.key file `permissions should be u=rw (0600) or less`.
+Enables setting proper permissions for some of the binding data, where the system has not provided them correctly. It allows binding files content to be copied/stored in a new file and directory. This has to be enabled by the user in order to be aware of the security risk, as some files might include sensitive material. For example, connecting to postgresql with the odbc client, the following error is thrown  for the tls.key file if copies are not allowed: `permissions should be u=rw (0600) or less`.
 
 #### bindingData
 
-An object for passing binding data to kube-service-bindings. This is useful especially in local dev environtment or as a fallback in case of binding data are not available.
+An optional object for passing binding data to kube-service-bindings. This is useful especially in local dev environtment or as a fallback in case of binding data are not available.
 
 Example 1 mongodb client:
 
@@ -221,7 +221,7 @@ try {
 
 ## getBinding()
 
-By not passing any argument to getBinding function, will return binding data in raw format.
+If you don't specify any parameters the getBinding function will return binding data in raw format.
 
 #### Example of fetching binding data in raw format
 
