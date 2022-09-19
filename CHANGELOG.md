@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://www.github.com/nodeshift/kube-service-bindings/compare/v2.0.0...v2.1.0) (2022-09-19)
+
+
+### Features
+
+* allow passing binding data as arguments ([7e1cdec](https://www.github.com/nodeshift/kube-service-bindings/commit/7e1cdec0f117083b6c5d89653fccc7729be3e6ff))
+
+
+### Bug Fixes
+
+* upgrade eslint from 8.22.0 to 8.23.0 ([c342169](https://www.github.com/nodeshift/kube-service-bindings/commit/c342169409558933bc4605ba961b59f70e3321f3))
+* upgrade eslint-plugin-n from 15.2.4 to 15.2.5 ([d5d3231](https://www.github.com/nodeshift/kube-service-bindings/commit/d5d3231619a2e6eb19823860885d5051168ca21d))
+* upgrade eslint-plugin-promise from 6.0.0 to 6.0.1 ([060d8f8](https://www.github.com/nodeshift/kube-service-bindings/commit/060d8f83f19ef434f4bfea3ea0589f76e15f6019))
+
 ## [2.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v1.0.0...v2.0.0) (2022-09-06)
 
 
