@@ -1,33 +1,72 @@
 const { defaultOptions } = require('../options/defaultOptions');
 const fs = require('fs');
 const path = require('path');
+const {
+  warnings: { NO_CLIENT_SPECIFIED_DEPRECATION, PASSING_ONLY_ID_DEPRECATION },
+  errors: { INVALID_ARGUMENTS }
+} = require('./messages/index.js');
+
+const typeMapping = {
+  KAFKA: 'kafka',
+  POSTGRESQL: 'postgresql',
+  REDIS: 'redis',
+  MONGODB: 'mongodb',
+  AMQP: 'amqp',
+  MYSQL: 'mysql'
+};
+
+const aliases = {
+  amqp: ['rabbitmq']
+};
 
 const getType = function (x) {
   return Object.prototype.toString.call(x).slice(8, -1);
 };
 
-function getBindOptions(options) {
-  const type = getType(options);
+function getBindOptions(type, client, bindingOptions) {
+  // case 1
+  if (!isDefined(type) && !isDefined(client) && !isDefined(bindingOptions)) {
+    return { id: undefined };
+  }
 
-  const isString = function () {
+  // case 2 - deprecated
+  if (!isDefined(client) && !isDefined(bindingOptions)) {
+    console.log(NO_CLIENT_SPECIFIED_DEPRECATION);
+    return defaultOptions;
+  }
+
+  // case 3 - not supported
+
+  // case 4 - We were not supporting it in the past, we dont support it now
+
+  // case 5
+  if (getType(client) === 'String' && !isDefined(bindingOptions)) {
+    return defaultOptions;
+  }
+
+  // case 6 - deprecated
+  if (
+    getType(client) === 'String' &&
+    isDefined(bindingOptions) &&
+    getType(bindingOptions) === 'String'
+  ) {
+    console.log(PASSING_ONLY_ID_DEPRECATION);
+
     return Object.assign({}, defaultOptions, {
-      id: options
+      id: bindingOptions
     });
-  };
+  }
 
-  const isObject = function () {
-    return Object.assign({}, defaultOptions, options);
-  };
+  // case 7
+  if (
+    getType(client) === 'String' &&
+    isDefined(bindingOptions) &&
+    getType(bindingOptions) === 'Object'
+  ) {
+    return Object.assign({}, defaultOptions, bindingOptions);
+  }
 
-  const resolveOptions = {
-    String: isString,
-    Object: isObject,
-    default: function () {
-      return defaultOptions;
-    }
-  };
-
-  return (resolveOptions[type] || resolveOptions.default)();
+  throw new Error(INVALID_ARGUMENTS);
 }
 
 const filterObject = function (object, keys) {
@@ -44,62 +83,45 @@ const filterObject = function (object, keys) {
 // passed in or create a sub-object on the binding and
 // then call setKey recursively to set the value
 const setKey = function (binding, key, value) {
-  const type = getType(key);
-
-  const isString = function () {
-    if (!key) return;
-    binding[key] = value;
-  };
-
-  const isArray = function () {
-    binding[key[0]] = new Array(value);
-  };
-
-  const isObject = function () {
-    for (const subkey in key) {
-      if (!binding[subkey]) {
-        binding[subkey] = {};
-      }
-      setKey(binding[subkey], key[subkey], value);
-    }
-  };
-
   const bindings = {
-    String: isString,
-    Array: isArray,
-    Object: isObject,
-    default: function () {}
+    String: () => {
+      if (!key) return;
+      binding[key] = value;
+    },
+    Array: () => {
+      binding[key[0]] = new Array(value);
+    },
+    Object: () => {
+      for (const subkey in key) {
+        if (!binding[subkey]) {
+          binding[subkey] = {};
+        }
+        setKey(binding[subkey], key[subkey], value);
+      }
+    },
+    default: () => {}
   };
-  return (bindings[type] || bindings.default)();
+  return (bindings[getType(key)] || bindings.default)();
 };
 
-function getKeyMapping({ client, clientInfo, filename }) {
-  if (!client) {
-    return filename;
+function mapKey(clientInfo, key) {
+  if (
+    clientInfo &&
+    (clientInfo.mapping[key] || clientInfo.mapping[key] === '')
+  ) {
+    return clientInfo.mapping[key].key || clientInfo.mapping[key];
   }
-  if (clientInfo.mapping[filename] || clientInfo.mapping[filename] === '') {
-    return clientInfo.mapping[filename].key || clientInfo.mapping[filename];
-  }
-  return filename;
+  return key;
 }
 
-function getValueMapping({
-  client,
-  clientInfo,
-  bindingsRoot,
-  filename,
-  key,
-  bindOptions
-}) {
-  const filepath = path.join(bindingsRoot, filename);
+function getBindValue(filepath, clientInfo, bindOptions) {
+  const filename = path.basename(filepath);
 
-  const fileContent = fs.readFileSync(filepath).toString().trim();
-
-  if (!client) {
-    return fileContent;
-  }
-
-  if (clientInfo.mapping[filename] && clientInfo.mapping[filename].path) {
+  if (
+    clientInfo &&
+    clientInfo.mapping[filename] &&
+    clientInfo.mapping[filename].path
+  ) {
     if (clientInfo.mapping[filename].copy && bindOptions.allowCopy === true) {
       const prefix = 'tmp-';
       const tempfolder = fs.mkdtempSync(prefix, { encoding: 'utf8' });
@@ -117,13 +139,14 @@ function getValueMapping({
 
     return filepath;
   }
+  return fs.readFileSync(filepath).toString().trim();
+}
 
-  // get the value and map if needed
-  if (clientInfo.valueMapping && clientInfo.valueMapping[key]) {
-    return clientInfo.valueMapping[key][fileContent];
+function mapValue(clientInfo, key, value) {
+  if (clientInfo && clientInfo.valueMapping && clientInfo.valueMapping[key]) {
+    return clientInfo.valueMapping[key][value];
   }
-
-  return fileContent;
+  return value;
 }
 
 function showFilePermissionsWarningMessage(itCanBeCopied, allowCopy, filename) {
@@ -167,11 +190,89 @@ function buildOptionParam(bindOpt) {
   return optList.join(' ');
 }
 
+const isKnownServiceType = (type) =>
+  fs.existsSync(path.join(__dirname, '..', 'clients', type));
+
+function getClientInfo(type, client) {
+  try {
+    return require(path.join(__dirname, '..', 'clients', type, client));
+  } catch (e) {
+    return undefined;
+  }
+}
+
+function isDefined(x) {
+  return !(typeof x === 'undefined' || x === null);
+}
+
+function getBindingDataPath(root, type, id) {
+  try {
+    const candidates = fs.readdirSync(root);
+    for (const file of candidates) {
+      const bindingType = fs
+        .readFileSync(path.join(root, file, 'type'))
+        .toString()
+        .trim();
+      if (
+        bindingType === typeMapping[type] ||
+        aliases[typeMapping[type]].includes(bindingType)
+      ) {
+        if (id === undefined || file.includes(id)) {
+          return path.join(root, file);
+        }
+      }
+    }
+  } catch (err) {}
+}
+
+function getRawBindingData(root) {
+  const bindingDataDirs = fs
+    .readdirSync(root)
+    .map((bindingDataDir) => {
+      const filenames = fs.readdirSync(path.join(root, bindingDataDir));
+      return { bindingDataDir, filenames };
+    })
+    .map(({ bindingDataDir, filenames }) => {
+      const bindingData = {};
+      filenames.forEach((filename) => {
+        const value = fs
+          .readFileSync(path.join(root, bindingDataDir, filename))
+          .toString()
+          .trim();
+        bindingData[filename] = value;
+      });
+      return bindingData;
+    });
+
+  return bindingDataDirs;
+}
+
+function getBindingData(bindingDataPath, clientInfo, bindOptions) {
+  return fs
+    .readdirSync(bindingDataPath)
+    .filter((filename) => !filename.startsWith('..'))
+    .map((filename) => [
+      filename,
+      getBindValue(
+        path.join(bindingDataPath, filename),
+        clientInfo,
+        bindOptions
+      )
+    ]);
+}
+
 module.exports = {
   getBindOptions,
   filterObject,
   setKey,
-  getKeyMapping,
-  getValueMapping,
-  buildOptionParam
+  mapKey,
+  getBindValue,
+  mapValue,
+  isKnownServiceType,
+  getClientInfo,
+  isDefined,
+  getBindingDataPath,
+  getRawBindingData,
+  buildOptionParam,
+  getBindingData
 };
