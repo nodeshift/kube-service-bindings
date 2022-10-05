@@ -1,5 +1,5 @@
 module.exports = {
-  bindedFiles: {
+  bindingData: {
     'auto-config.cnf':
       '[mysqld]\ninnodb_buffer_pool_size = 750000000\nmax_connections = 79',
     'ca.crt': '-----BEGIN CERTIFICATE-----\nFGH\n-----END CERTIFICATE-----',
@@ -23,7 +23,14 @@ module.exports = {
     user: 'root',
     xtrabackup: 'backup_password'
   },
-  connectionCredentials: {
+  bindingDataMappedForMysql2: {
+    host: 'localhost',
+    port: 3306,
+    database: 'test',
+    user: 'root',
+    password: 'password'
+  },
+  bindingDataMappedForMysql: {
     host: 'localhost',
     port: 3306,
     database: 'test',
