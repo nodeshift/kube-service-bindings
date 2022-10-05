@@ -1,6 +1,9 @@
 const assert = require('assert');
 const { describe, it } = require('mocha');
-const { buildOptionParam } = require('../../utils/index.js');
+const {
+  buildOptionParam,
+  isKnownServiceType
+} = require('../../utils/index.js');
 
 describe('utils tests', () => {
   it('buildOptionParam', () => {
@@ -21,5 +24,24 @@ describe('utils tests', () => {
       '--cluster=fruit-service-test -c opt2=val2 -c opt3=val3',
       '--cluster=fruit-service-test -c opt2=val2 -c opt3=val3'
     ]);
+  });
+
+  describe('Validates the isKnownServiceType function', () => {
+    const testData = [
+      { serviceType: 'AMQP', known: true },
+      { serviceType: 'KAFKA', known: true },
+      { serviceType: 'MONGODB', known: true },
+      { serviceType: 'MYSQL', known: true },
+      { serviceType: 'POSTGRESQL', known: true },
+      { serviceType: 'REDIS', known: true }
+    ];
+
+    testData.forEach((data) => {
+      const serviceType = data.serviceType;
+      const isKnown = data.known;
+      it(`${serviceType}`, () => {
+        assert.equal(isKnownServiceType(serviceType), isKnown);
+      });
+    });
   });
 });
