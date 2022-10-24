@@ -4,8 +4,14 @@ const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
 const {
-  errors: { NO_SERVICE_BINDING_ROOT, INVALID_ARGUMENTS }
+  errors: { NO_SERVICE_BINDING_ROOT, INVALID_ARGUMENTS, UNKNOWN_SERVICE_TYPE, UNKNOWN_CLIENT, NO_BINDING_FOUND }
 } = require('../../utils/messages/index.js');
+
+const ERROR_INVALID_ARGUMENTS = `Error: ${INVALID_ARGUMENTS}`;
+const ERROR_NO_SERVICE_BINDING_ROOT = `Error: ${NO_SERVICE_BINDING_ROOT}`;
+const ERROR_UNKNOWN_SERVICE_TYPE = `Error: ${UNKNOWN_SERVICE_TYPE}`;
+const ERROR_UNKNOWN_CLIENT = `Error: ${UNKNOWN_CLIENT}`;
+const ERROR_NO_BINDING_FOUND = `Error: ${NO_BINDING_FOUND}`;
 
 describe('basic tests', () => {
   let env;
@@ -43,16 +49,14 @@ describe('basic tests', () => {
     ]);
   });
 
-  it('unknown service', () => {
+  it(`should throw error: ${ERROR_UNKNOWN_SERVICE_TYPE}`, () => {
     try {
       bindings.getBinding('DOEST_NOT_EXIST');
       assert.fail();
     } catch (err) {
-      assert.equal(err.toString(), 'Error: Unknown service type');
+      assert.equal(err.toString(), ERROR_UNKNOWN_SERVICE_TYPE);
     }
   });
-
-  const ERROR_INVALID_ARGUMENTS = `Error: ${INVALID_ARGUMENTS}`;
 
   it(`should throw error: ${ERROR_INVALID_ARGUMENTS}`, () => {
     try {
@@ -63,12 +67,12 @@ describe('basic tests', () => {
     }
   });
 
-  it('unknown client', () => {
+  it(`should throw error: ${ERROR_UNKNOWN_CLIENT}`, () => {
     try {
       bindings.getBinding('KAFKA', 'does-not-exist');
       assert.fail();
     } catch (err) {
-      assert.equal(err.toString(), 'Error: Unknown client');
+      assert.equal(err.toString(), ERROR_UNKNOWN_CLIENT);
     }
   });
 
@@ -88,17 +92,12 @@ describe('basic tests', () => {
     });
   });
 
-  it('id matches available', () => {
-    const binding = bindings.getBinding('KAFKA', 'kafkajs', 'kafka');
-    assert(binding);
-  });
-
-  it('id filters available', () => {
+  it(`should throw error: ${ERROR_NO_BINDING_FOUND}`, () => {
     try {
       bindings.getBinding('KAFKA', 'kafkajs', 'does_not_exist');
       assert.fail();
     } catch (err) {
-      assert.equal(err.toString(), 'Error: No Binding Found');
+      assert.equal(err.toString(), ERROR_NO_BINDING_FOUND);
     }
   });
 
@@ -114,12 +113,12 @@ describe('basic tests 2', () => {
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings2') };
   });
 
-  it('no available binding', () => {
+  it(`should throw error: ${ERROR_NO_BINDING_FOUND}`, () => {
     try {
       bindings.getBinding('KAFKA');
       assert.fail();
     } catch (err) {
-      assert.equal(err.toString(), 'Error: No Binding Found');
+      assert.equal(err.toString(), ERROR_NO_BINDING_FOUND);
     }
   });
 
@@ -129,7 +128,6 @@ describe('basic tests 2', () => {
 });
 
 describe('No service binding variable provided on process environment.', () => {
-  const ERROR_NO_SERVICE_BINDING_ROOT = `Error: ${NO_SERVICE_BINDING_ROOT}`;
   it(`should throw error: ${NO_SERVICE_BINDING_ROOT}`, () => {
     try {
       bindings.getBinding('KAFKA');

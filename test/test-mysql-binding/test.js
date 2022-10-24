@@ -4,8 +4,9 @@ const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
 const {
-  bindedFiles,
-  connectionCredentials,
+  bindingData,
+  bindingDataMappedForMysql2,
+  bindingDataMappedForMysql,
   connectionString
 } = require('./assertions');
 
@@ -16,73 +17,112 @@ describe('MySQL', () => {
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
   });
 
-  describe('mysql2', () => {
-    it('Do NOT Remove Unmapped Values', () => {
-      const binding = bindings.getBinding('MYSQL', 'mysql2', {
-        removeUnmapped: false
-      });
-      assert(binding);
-      assert.deepEqual(binding, bindedFiles);
-    });
-
-    it('Remove Unmapped Values', () => {
-      const binding = bindings.getBinding('MYSQL', 'mysql2', {
-        removeUnmapped: true
-      });
-      assert(binding);
-      assert.deepEqual(binding, connectionCredentials);
-    });
-
+  describe('mysql2 on mysql-bindings', () => {
     it('Default behaviour.', () => {
       const binding = bindings.getBinding('MYSQL', 'mysql2');
       assert(binding);
-      assert.deepEqual(binding, connectionCredentials);
+      assert.deepEqual(binding, bindingDataMappedForMysql2);
     });
-  });
-  describe('mysql', () => {
-    it('Remove Unmapped Values', () => {
-      const binding = bindings.getBinding('MYSQL', 'mysql', {
-        removeUnmapped: true
-      });
-      assert(binding);
-      assert.deepEqual(binding, connectionCredentials);
-    });
-
     it('Do NOT Remove Unmapped Values', () => {
-      const binding = bindings.getBinding('MYSQL', 'mysql', {
+      const binding = bindings.getBinding('MYSQL', 'mysql2', {
         removeUnmapped: false
       });
       assert(binding);
-      assert.deepEqual(binding, { ...bindedFiles, ...connectionCredentials });
+      assert.deepEqual(binding, bindingData);
     });
 
+    it('Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql2', {
+        removeUnmapped: true
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingDataMappedForMysql2);
+    });
+  });
+
+  describe('mysql2 Passing binding data as arguments', () => {
+    it('Default behaviour.', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql2', {
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingDataMappedForMysql2);
+    });
+    it('Do NOT Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql2', {
+        removeUnmapped: false,
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingData);
+    });
+
+    it('Removes Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql2', {
+        removeUnmapped: true,
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingDataMappedForMysql2);
+    });
+  });
+  describe('mysql on mysql-bindings', () => {
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MYSQL', 'mysql');
       assert(binding);
-      assert.deepEqual(binding, connectionCredentials);
+      assert.deepEqual(binding, bindingDataMappedForMysql);
     });
-  });
-  describe('ODBC Client for MySQL', () => {
-    it('Do NOT Remove Unmapped Values', () => {
-      const binding = bindings.getBinding('MYSQL', 'odbc', {
+    it('Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql', {
+        removeUnmapped: true
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingDataMappedForMysql);
+    });
+
+    it('Does NOT Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql', {
         removeUnmapped: false
       });
       assert(binding);
       assert.deepEqual(binding, {
-        ...bindedFiles,
-        connectionString
+        ...bindingData,
+        ...bindingDataMappedForMysql
       });
     });
-    it('Remove Unmapped Values', () => {
-      const binding = bindings.getBinding('MYSQL', 'odbc', {
-        removeUnmapped: true
+  });
+
+  describe('mysql passing binding data as arguments', () => {
+    it('Default behaviour', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql', {
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingDataMappedForMysql);
+    });
+    it('Removes Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql', {
+        removeUnmapped: true,
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, bindingDataMappedForMysql);
+    });
+
+    it('Does NOT Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'mysql', {
+        removeUnmapped: false,
+        bindingData
       });
       assert(binding);
       assert.deepEqual(binding, {
-        connectionString
+        ...bindingData,
+        ...bindingDataMappedForMysql
       });
     });
+  });
 
+  describe('ODBC Client on mysql-bindings', () => {
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MYSQL', 'odbc');
       assert(binding);
@@ -90,96 +130,60 @@ describe('MySQL', () => {
         connectionString
       });
     });
-  });
-  describe('Binding data as parameter.', () => {
-    describe('mysql2', () => {
-      it('Do NOT Remove Unmapped Values', () => {
-        const binding = bindings.getBinding('MYSQL', 'mysql2', {
-          removeUnmapped: false,
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, bindedFiles);
+    it('Do NOT Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'odbc', {
+        removeUnmapped: false
       });
-
-      it('Remove Unmapped Values', () => {
-        const binding = bindings.getBinding('MYSQL', 'mysql2', {
-          removeUnmapped: true,
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, connectionCredentials);
-      });
-
-      it('Default behaviour.', () => {
-        const binding = bindings.getBinding('MYSQL', 'mysql2', {
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, connectionCredentials);
+      assert(binding);
+      assert.deepEqual(binding, {
+        ...bindingData,
+        connectionString
       });
     });
-    describe('mysql', () => {
-      it('Remove Unmapped Values', () => {
-        const binding = bindings.getBinding('MYSQL', 'mysql', {
-          removeUnmapped: true,
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, connectionCredentials);
+    it('Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'odbc', {
+        removeUnmapped: true
       });
-
-      it('Do NOT Remove Unmapped Values', () => {
-        const binding = bindings.getBinding('MYSQL', 'mysql', {
-          removeUnmapped: false,
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, { ...bindedFiles, ...connectionCredentials });
-      });
-
-      it('Default behaviour', () => {
-        const binding = bindings.getBinding('MYSQL', 'mysql', {
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, connectionCredentials);
-      });
-    });
-    describe('ODBC Client for MySQL', () => {
-      it('Do NOT Remove Unmapped Values', () => {
-        const binding = bindings.getBinding('MYSQL', 'odbc', {
-          removeUnmapped: false,
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, {
-          ...bindedFiles,
-          connectionString
-        });
-      });
-      it('Remove Unmapped Values', () => {
-        const binding = bindings.getBinding('MYSQL', 'odbc', {
-          removeUnmapped: true,
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, {
-          connectionString
-        });
-      });
-
-      it('Default behaviour', () => {
-        const binding = bindings.getBinding('MYSQL', 'odbc', {
-          bindingData: bindedFiles
-        });
-        assert(binding);
-        assert.deepEqual(binding, {
-          connectionString
-        });
+      assert(binding);
+      assert.deepEqual(binding, {
+        connectionString
       });
     });
   });
+
+  describe('ODBC Client passing binding data as arguments', () => {
+    it('Default behaviour', () => {
+      const binding = bindings.getBinding('MYSQL', 'odbc', {
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, {
+        connectionString
+      });
+    });
+    it('Do NOT Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'odbc', {
+        removeUnmapped: false,
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, {
+        ...bindingData,
+        connectionString
+      });
+    });
+    it('Remove Unmapped Values', () => {
+      const binding = bindings.getBinding('MYSQL', 'odbc', {
+        removeUnmapped: true,
+        bindingData
+      });
+      assert(binding);
+      assert.deepEqual(binding, {
+        connectionString
+      });
+    });
+  });
+
   after(() => {
     process.env = env;
   });

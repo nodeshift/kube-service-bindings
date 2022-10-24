@@ -3,13 +3,6 @@ const path = require('path');
 const { after, before, describe, it } = require('mocha');
 const bindings = require('../../index.js');
 
-const bindingData = {
-  host: 'test.ourdomain.com',
-  password: 'p1',
-  port: 1234,
-  username: 'michael'
-};
-
 describe('MongoDB', () => {
   let env;
   before(() => {
@@ -18,9 +11,10 @@ describe('MongoDB', () => {
   });
 
   describe('mongodb on mongodb-bindings', () => {
+    const id = 'mongodb-bindings';
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
-        id: 'mongodb-bindings'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -39,9 +33,10 @@ describe('MongoDB', () => {
   });
 
   describe('mongodb on mongodb-bindings-without-username-password', () => {
+    const id = 'mongodb-bindings-without-username-password';
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
-        id: 'mongodb-bindings-without-username-password'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -54,9 +49,10 @@ describe('MongoDB', () => {
   });
 
   describe('mongodb on mongodb-bindings-with-port', () => {
+    const id = 'mongodb-bindings-with-port';
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
-        id: 'mongodb-bindings-with-port'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -74,6 +70,13 @@ describe('MongoDB', () => {
   });
 
   describe('mongodb on passing binding data as arguments', () => {
+    const bindingData = {
+      host: 'test.ourdomain.com',
+      password: 'p1',
+      port: 1234,
+      username: 'michael'
+    };
+
     it('Default behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongodb', {
         bindingData
@@ -94,9 +97,10 @@ describe('MongoDB', () => {
   });
 
   describe('mongoose on mongodb-bindings ', () => {
+    const id = 'mongodb-bindings';
     it('Default behavior', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
-        id: 'mongodb-bindings'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -113,7 +117,7 @@ describe('MongoDB', () => {
     it('Remove unmapped values', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
         removeUnmapped: true,
-        id: 'mongodb-bindings'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -130,7 +134,7 @@ describe('MongoDB', () => {
     it('Do NOT Remove unmapped values', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
         removeUnmapped: false,
-        id: 'mongodb-bindings'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -149,9 +153,10 @@ describe('MongoDB', () => {
   });
 
   describe('mongoose on mongodb-bindings-with-port', () => {
+    const id = 'mongodb-bindings-with-port';
     it('Default Behaviour', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
-        id: 'mongodb-bindings-with-port'
+        id
       });
       assert(binding);
       assert.deepEqual(binding, {
@@ -167,7 +172,7 @@ describe('MongoDB', () => {
 
     it('Remove unmapped values', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
-        id: 'mongodb-bindings-with-port',
+        id,
         removeUnmapped: true
       });
       assert(binding);
@@ -184,7 +189,7 @@ describe('MongoDB', () => {
 
     it('Do NOT Remove unmapped values', () => {
       const binding = bindings.getBinding('MONGODB', 'mongoose', {
-        id: 'mongodb-bindings-with-port',
+        id,
         removeUnmapped: false
       });
       assert(binding);

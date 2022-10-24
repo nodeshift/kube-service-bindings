@@ -21,16 +21,16 @@ describe('PSQL', () => {
     env = process.env;
     process.env = { SERVICE_BINDING_ROOT: path.join(__dirname, 'bindings') };
   });
-  describe('PG client on postgresql-rhoda', () => {
+  describe('pg client on postgresql-rhoda', () => {
     const id = 'postgresql-rhoda';
-    it('Default behavior: removes unnecessary properties', () => {
+    it('Default behaviour.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
         id
       });
       assert(binding);
       assert.deepEqual(binding, postgresDataBindingsMappedForPGRHODA);
     });
-    it('Removes unnecessary properties', () => {
+    it('Removes Unmapped Values', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
         id,
         removeUnmapped: true
@@ -38,7 +38,7 @@ describe('PSQL', () => {
       assert(binding);
       assert.deepEqual(binding, postgresDataBindingsMappedForPGRHODA);
     });
-    it('Does not remove unnecessary properties', () => {
+    it('Does NOT Remove Unmapped Values', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
         id,
         removeUnmapped: false
@@ -47,17 +47,16 @@ describe('PSQL', () => {
       assert.deepEqual(binding, postgresDataBindingsMappedForPGRHODA);
     });
   });
-  describe('PG client on crunchy-data-postgres-operator', () => {
+  describe('pg client on crunchy-data-postgres-operator', () => {
     const id = 'crunchy-data-postgres-operator';
-    it('Default behavior: removes unnecessary properties.', () => {
+    it('Default behaviour.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
         id
       });
       assert(binding);
       assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
     });
-
-    it('Removes unnecessary properties', () => {
+    it('Removes Unmapped Values', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
         id,
         removeUnmapped: true
@@ -65,8 +64,7 @@ describe('PSQL', () => {
       assert(binding);
       assert.deepEqual(binding, crunchyDataBindingsMappedForPG);
     });
-
-    it('Does not remove unnecessary properties', () => {
+    it('Does NOT Remove Unmapped Values', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'pg', {
         id,
         removeUnmapped: false
@@ -78,7 +76,7 @@ describe('PSQL', () => {
   describe('ODBC client on crunchy-data-postgres-operator', () => {
     const id = 'crunchy-data-postgres-operator';
 
-    it('Default behavior: removes unnecessary properties. Does NOT copy tls.key in another directory with proper permissions.', () => {
+    it('Default behavior & Does NOT copy tls.key in another directory with proper permissions.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id
       });
@@ -93,7 +91,7 @@ describe('PSQL', () => {
       assert.deepEqual(binding, odbcConnectionString);
     });
 
-    it('Removes unnecessary properties and copies tls.key file in another location with altered/proper permissions.', () => {
+    it('Removes Unmapped Values & copies tls.key file in another location with altered/proper permissions.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id,
         removeUnmapped: true,
@@ -119,7 +117,7 @@ describe('PSQL', () => {
       });
     });
 
-    it('Removes unnecessary properties and does NOT copy tls.key file in another directory.', () => {
+    it('Removes Unmapped Values & does NOT copy tls.key file in another directory.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id,
         removeUnmapped: true,
@@ -136,7 +134,7 @@ describe('PSQL', () => {
       assert.deepEqual(binding, odbcConnectionString);
     });
 
-    it('Does NOT remove unnecessary properties and copies tls.key file in another directory with altered/proper permissions.', () => {
+    it('Does NOT Remove Unmapped Values & copies tls.key file in another directory with altered/proper permissions.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id,
         removeUnmapped: false,
@@ -173,7 +171,7 @@ describe('PSQL', () => {
       });
     });
 
-    it('Does NOT remove unnecessary properties and does NOT copy tls.key file in another directory with altered/proper permissions.', () => {
+    it('Does NOT Remove Unmapped Values & does NOT copy tls.key file in another directory with altered/proper permissions.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id,
         removeUnmapped: false,
@@ -202,7 +200,7 @@ describe('PSQL', () => {
       assert.deepEqual(binding, validationObject);
     });
 
-    it('Removes unnecessary properties and copies tls.key file in another directory with altered/proper permissions.', () => {
+    it('Removes Unmapped Values & copies tls.key file in another directory with altered/proper permissions.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id,
         allowCopy: true
@@ -227,7 +225,7 @@ describe('PSQL', () => {
       });
     });
 
-    it('Removes unnecessary properties and does NOT copy tls.key file in another directory.', () => {
+    it('Removes Unmapped Values & does NOT copy tls.key file in another directory.', () => {
       const binding = bindings.getBinding('POSTGRESQL', 'odbc', {
         id,
         allowCopy: false

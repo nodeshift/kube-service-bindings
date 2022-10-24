@@ -39,7 +39,7 @@ describe('KAFKA', () => {
   });
 
   describe('kafkajs', () => {
-    it('Do NOT Remove Unmapped Values', () => {
+    it('Does NOT Remove Unmapped Values', () => {
       const binding = bindings.getBinding('KAFKA', 'kafkajs', {
         removeUnmapped: false
       });
@@ -47,7 +47,7 @@ describe('KAFKA', () => {
       assert.deepEqual(binding, kafkajsConnectionCredentials);
     });
 
-    it('Remove Unmapped Values', () => {
+    it('Removes Unmapped Values', () => {
       const binding = bindings.getBinding('KAFKA', 'kafkajs', {
         removeUnmapped: true
       });
@@ -61,7 +61,7 @@ describe('KAFKA', () => {
       assert.deepEqual(binding, kafkajsConnectionCredentials);
     });
     describe('Passing bindng data as parameter.', () => {
-      it('Do NOT Remove Unmapped Values', () => {
+      it('Does NOT Remove Unmapped Values', () => {
         const binding = bindings.getBinding('KAFKA', 'kafkajs', {
           bindingData,
           removeUnmapped: false
@@ -70,7 +70,7 @@ describe('KAFKA', () => {
         assert.deepEqual(binding, kafkajsConnectionCredentials);
       });
 
-      it('Remove Unmapped Values', () => {
+      it('Removes Unmapped Values', () => {
         const binding = bindings.getBinding('KAFKA', 'kafkajs', {
           bindingData,
           removeUnmapped: true
@@ -90,27 +90,27 @@ describe('KAFKA', () => {
   });
 
   describe('node-rdkafka', () => {
-    it('Do NOT Remove Unmapped Values', () => {
+    it('Does NOT Remove Unmapped Values', () => {
       const binding = bindings.getBinding('KAFKA', 'node-rdkafka', {
         removeUnmapped: false
       });
       assert(binding);
       assert.deepEqual(binding, nodeRdkafkaConnectionCredentials);
     });
-    it('Remove Unmapped Values', () => {
+    it('Removes Unmapped Values', () => {
       const binding = bindings.getBinding('KAFKA', 'node-rdkafka', {
         removeUnmapped: true
       });
       assert(binding);
       assert.deepEqual(binding, nodeRdkafkaConnectionCredentials);
     });
-    it('Defaul behaviour', () => {
+    it('Default behaviour', () => {
       const binding = bindings.getBinding('KAFKA', 'node-rdkafka');
       assert(binding);
       assert.deepEqual(binding, nodeRdkafkaConnectionCredentials);
     });
     describe('Passing bindng data as parameter.', () => {
-      it('Do NOT Remove Unmapped Values', () => {
+      it('Does NOT Remove Unmapped Values', () => {
         const binding = bindings.getBinding('KAFKA', 'node-rdkafka', {
           bindingData,
           removeUnmapped: false
@@ -118,7 +118,7 @@ describe('KAFKA', () => {
         assert(binding);
         assert.deepEqual(binding, nodeRdkafkaConnectionCredentials);
       });
-      it('Remove Unmapped Values', () => {
+      it('Removes Unmapped Values', () => {
         const binding = bindings.getBinding('KAFKA', 'node-rdkafka', {
           bindingData,
           removeUnmapped: true
@@ -126,7 +126,7 @@ describe('KAFKA', () => {
         assert(binding);
         assert.deepEqual(binding, nodeRdkafkaConnectionCredentials);
       });
-      it('Defaul behaviour', () => {
+      it('Default behaviour', () => {
         const binding = bindings.getBinding('KAFKA', 'node-rdkafka', {
           bindingData
         });
