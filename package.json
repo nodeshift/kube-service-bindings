@@ -39,7 +39,7 @@
     "kafka"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=16"
   },
   "support": true,
   "devDependencies": {
