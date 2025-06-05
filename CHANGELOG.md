@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v3.0.0...v4.0.0) (2025-06-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove Node 14, 16, 18 support ([#288](https://github.com/nodeshift/kube-service-bindings/issues/288))
+
+### Features
+
+* add node 24 support ([#287](https://github.com/nodeshift/kube-service-bindings/issues/287)) ([51e07ca](https://github.com/nodeshift/kube-service-bindings/commit/51e07caab9826dd04d6ba4b2ddcd7cecd7001a3c))
+* remove Node 14, 16, 18 support ([#288](https://github.com/nodeshift/kube-service-bindings/issues/288)) ([7973679](https://github.com/nodeshift/kube-service-bindings/commit/797367946c5496b9703f5aae62f9b83c5ce986e2))
+* upgrade eslint-plugin-n from 15.7.0 to 16.0.0 ([b23deee](https://github.com/nodeshift/kube-service-bindings/commit/b23deee6635fe33a52ff70363a2ec0c96d75884d))
+* upgrade nyc from 15.1.0 to 17.0.0 ([129ce43](https://github.com/nodeshift/kube-service-bindings/commit/129ce4346e81799a0c2687bee3b76a6e0fb9f3d4))
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([8900c59](https://github.com/nodeshift/kube-service-bindings/commit/8900c59dde349857d38a03fb5ff4ae79489411dc))
+* upgrade eslint from 8.42.0 to 8.43.0 ([feff069](https://github.com/nodeshift/kube-service-bindings/commit/feff0697b521a3b866f7e2a60ccd4a8bc138be71))
+* upgrade eslint from 8.43.0 to 8.44.0 ([a5aff30](https://github.com/nodeshift/kube-service-bindings/commit/a5aff307e172c948f7dff94f0ed75c6c461c63c8))
+* upgrade eslint from 8.44.0 to 8.45.0 ([3affa03](https://github.com/nodeshift/kube-service-bindings/commit/3affa03edc710c73a4e020954fc9cf64b58f62ce))
+* upgrade eslint from 8.45.0 to 8.46.0 ([0463e5a](https://github.com/nodeshift/kube-service-bindings/commit/0463e5a4f2e0fe601b64f86f6c7dcb6a69b143da))
+* upgrade eslint from 8.46.0 to 8.47.0 ([fbdb892](https://github.com/nodeshift/kube-service-bindings/commit/fbdb89275c02bda2eb62c70bc2bea96d0ea0dd63))
+* upgrade eslint from 8.47.0 to 8.48.0 ([baba038](https://github.com/nodeshift/kube-service-bindings/commit/baba038a797f9cde234322bbcc05a1603ec8ef1b))
+* upgrade eslint from 8.49.0 to 8.50.0 ([1323875](https://github.com/nodeshift/kube-service-bindings/commit/1323875aa2b4b85c535e74ab8eb4a06f41384bd1))
+* upgrade eslint from 8.50.0 to 8.51.0 ([be6ec00](https://github.com/nodeshift/kube-service-bindings/commit/be6ec00b03f7817f68aba3d45399dbf2ed4e009d))
+* upgrade eslint from 8.51.0 to 8.52.0 ([0c9f748](https://github.com/nodeshift/kube-service-bindings/commit/0c9f7488ab0091ad7f3d4261d1b722408929907c))
+* upgrade eslint from 8.52.0 to 8.53.0 ([7a69cdf](https://github.com/nodeshift/kube-service-bindings/commit/7a69cdfbee041143ae481d9cebae52afd491dd54))
+* upgrade eslint from 8.53.0 to 8.54.0 ([a966fd5](https://github.com/nodeshift/kube-service-bindings/commit/a966fd5ba9b8fb98dd978a914fddf1a41621f4aa))
+* upgrade eslint from 8.54.0 to 8.55.0 ([#136](https://github.com/nodeshift/kube-service-bindings/issues/136)) ([0053b18](https://github.com/nodeshift/kube-service-bindings/commit/0053b18d8f8e220e8261f8e628ef33dc20f3bf5b))
+* upgrade eslint from 8.55.0 to 8.56.0 ([57e994c](https://github.com/nodeshift/kube-service-bindings/commit/57e994c1a451547445504d7df6e78d7cbe565f0c))
+* upgrade eslint from 8.56.0 to 8.57.0 ([71ede34](https://github.com/nodeshift/kube-service-bindings/commit/71ede34df3c1d7469fda83bffe2a7c27c731f2c2))
+* upgrade eslint-plugin-import from 2.27.5 to 2.28.0 ([c1bb37e](https://github.com/nodeshift/kube-service-bindings/commit/c1bb37e3af7d21e309df6bb52cf27e1b5335c898))
+* upgrade eslint-plugin-import from 2.28.0 to 2.28.1 ([062bcb2](https://github.com/nodeshift/kube-service-bindings/commit/062bcb256f0a77591e0df1db2fdf7a197fb22627))
+* upgrade eslint-plugin-import from 2.28.1 to 2.29.0 ([8953b4a](https://github.com/nodeshift/kube-service-bindings/commit/8953b4ab5e14b869d060c6c509808efddc3d2e8b))
+* upgrade eslint-plugin-import from 2.29.0 to 2.29.1 ([f859e59](https://github.com/nodeshift/kube-service-bindings/commit/f859e59835a72088783d9ad045fdd8f4aab4ff78))
+* upgrade eslint-plugin-n from 16.0.0 to 16.0.1 ([fe318bb](https://github.com/nodeshift/kube-service-bindings/commit/fe318bb34e839be5c97e8706c78560d5b0d7f70e))
+* upgrade eslint-plugin-promise from 6.1.1 to 6.2.0 ([20d53b9](https://github.com/nodeshift/kube-service-bindings/commit/20d53b91c788674ef1a89fe2a47e8649d54ba3e9))
+* upgrade eslint-plugin-promise from 6.2.0 to 6.4.0 ([158e1ac](https://github.com/nodeshift/kube-service-bindings/commit/158e1ac6ca9e118bd27d57b7fce708ce74c526e6))
+* upgrade eslint-plugin-promise from 6.4.0 to 6.5.0 ([b4b12f5](https://github.com/nodeshift/kube-service-bindings/commit/b4b12f5372aa9421a2c11d89e0e1bce2812e7b88))
+* upgrade mocha from 10.2.0 to 10.3.0 ([c32ec1c](https://github.com/nodeshift/kube-service-bindings/commit/c32ec1cb44f777f65dd93a0703af1fa351ca7e72))
+* upgrade mocha from 10.3.0 to 10.4.0 ([06583a7](https://github.com/nodeshift/kube-service-bindings/commit/06583a7ac29c86f02b407fdac0bbc976e8272913))
+* upgrade mocha from 10.6.0 to 10.7.0 ([dc78cfa](https://github.com/nodeshift/kube-service-bindings/commit/dc78cfa2502d8dbcced31d7b6f288ad1fad96101))
+
 ## [3.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v2.1.0...v3.0.0) (2023-06-01)
 
 
