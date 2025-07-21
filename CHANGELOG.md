@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/nodeshift/kube-service-bindings/compare/v4.0.0...v4.1.0) (2025-07-21)
+
+
+### Features
+
+* upgrade mocha from 10.7.0 to 11.5.0 ([edf2d1e](https://github.com/nodeshift/kube-service-bindings/commit/edf2d1e75cb849b6121001b42270c18a34b7c889))
+
+
+### Bug Fixes
+
+* upgrade eslint-plugin-import from 2.29.1 to 2.32.0 ([1540e61](https://github.com/nodeshift/kube-service-bindings/commit/1540e6199b41a59ce5222d43842e87338f279aea))
+* upgrade mocha from 11.5.0 to 11.7.0 ([1fa20d3](https://github.com/nodeshift/kube-service-bindings/commit/1fa20d3778c66efafb62d423c05a440b21a1aacc))
+* upgrade mocha from 11.7.0 to 11.7.1 ([a1bb884](https://github.com/nodeshift/kube-service-bindings/commit/a1bb884cea0c8bb5867c22b82350f364279c4559))
+
 ## [4.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v3.0.0...v4.0.0) (2025-06-05)
 
 
