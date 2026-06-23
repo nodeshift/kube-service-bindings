@@ -1,11 +1,17 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ main ]
+
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nodejs-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -22,7 +28,7 @@ jobs:
       uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
+    - run: npm ci
     - run: npm test
     - run: npx @pkgjs/support@latest validate
     - run: node_modules/nyc/bin/nyc.js report --reporter=lcovonly
