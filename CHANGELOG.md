@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.3](https://github.com/nodeshift/kube-service-bindings/compare/v5.0.2...v5.0.3) (2026-06-23)
+
+
+### Bug Fixes
+
+* Adding id token permission on the release workflow ([c7c6e87](https://github.com/nodeshift/kube-service-bindings/commit/c7c6e876f3667f77dcc25715979680b17bc13ea6))
+* pinning coveralls ([878e170](https://github.com/nodeshift/kube-service-bindings/commit/878e170e57cd88843f11642b67164813bb7e4bd7))
+
 ## [5.0.2](https://github.com/nodeshift/kube-service-bindings/compare/v5.0.1...v5.0.2) (2026-06-23)
 
 
