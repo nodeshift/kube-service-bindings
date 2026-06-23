@@ -27,5 +27,5 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.KUBE_SERVICE_BINDINGS_PUBLISH}}
+          NODE_AUTH_TOKEN: ${{secrets.NODESHIFT_RELEASES_TOKEN}}
         if: ${{ steps.release.outputs.release_created }}
