@@ -247,7 +247,7 @@ describe('PSQL', () => {
 });
 
 function removeDirectory(sslkey) {
-  fs.rmdir(path.dirname(sslkey), { recursive: true }, (err) => {
+  fs.rm(path.dirname(sslkey), { recursive: true }, (err) => {
     if (err) {
       console.error(err);
     }
