@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.2](https://github.com/nodeshift/kube-service-bindings/compare/v5.0.1...v5.0.2) (2026-06-23)
+
+
+### Bug Fixes
+
+* adding concurrency on the nodejs-ci-action ([64e99e7](https://github.com/nodeshift/kube-service-bindings/commit/64e99e735eb013d1dae75ed1c85fdaae46cd5c97))
+* updating release workflow ([a3b9a7a](https://github.com/nodeshift/kube-service-bindings/commit/a3b9a7aebf622ad4281eabbf4ee2b228b27fb46e))
+
 ## [5.0.1](https://github.com/nodeshift/kube-service-bindings/compare/v5.0.0...v5.0.1) (2026-06-23)
 
 
