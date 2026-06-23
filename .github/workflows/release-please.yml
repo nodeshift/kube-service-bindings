@@ -8,6 +8,7 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release-please:
@@ -26,11 +27,12 @@ jobs:
     if: needs.release-please.outputs.release_created == 'true'
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 26
           registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
       - run: npm ci
       - run: npm test
       - run: npm publish
