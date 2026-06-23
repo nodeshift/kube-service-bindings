@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v4.0.0...v5.0.0) (2026-06-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove Node 20 support
+
+### Features
+
+* adding dependabot for upgrading github-actions ([cfb9ff7](https://github.com/nodeshift/kube-service-bindings/commit/cfb9ff7d5a65ed0c6052e6ef77c74357ce1606ea))
+* remove Node 20 support ([f3ba942](https://github.com/nodeshift/kube-service-bindings/commit/f3ba942e84df2a8313928ff264f2cc78eebc0cb2))
+* upgrade mocha from 10.7.0 to 11.5.0 ([edf2d1e](https://github.com/nodeshift/kube-service-bindings/commit/edf2d1e75cb849b6121001b42270c18a34b7c889))
+
+
+### Bug Fixes
+
+* package.json & package-lock.json to reduce vulnerabilities ([1b45d72](https://github.com/nodeshift/kube-service-bindings/commit/1b45d72e888e0d18ae98ec02e0e5ddb7877f3f33))
+* replacing rmdir with rm for properly supporting node 26 ([8d5cd85](https://github.com/nodeshift/kube-service-bindings/commit/8d5cd855457829fbd70df89c0b6ac713aa0cfe64))
+* upgrade eslint-plugin-import from 2.29.1 to 2.32.0 ([1540e61](https://github.com/nodeshift/kube-service-bindings/commit/1540e6199b41a59ce5222d43842e87338f279aea))
+* upgrade mocha from 11.5.0 to 11.7.0 ([1fa20d3](https://github.com/nodeshift/kube-service-bindings/commit/1fa20d3778c66efafb62d423c05a440b21a1aacc))
+* upgrade mocha from 11.7.0 to 11.7.1 ([a1bb884](https://github.com/nodeshift/kube-service-bindings/commit/a1bb884cea0c8bb5867c22b82350f364279c4559))
+
 ## [4.0.0](https://github.com/nodeshift/kube-service-bindings/compare/v3.0.0...v4.0.0) (2025-06-05)
 
 
